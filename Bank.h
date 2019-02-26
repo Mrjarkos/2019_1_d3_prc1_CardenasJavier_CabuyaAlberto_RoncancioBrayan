@@ -6,9 +6,25 @@
 #include "BankAccount.h"
 #include "BankClient.h"
 
+struct Account_information{
+	bool state;
+	Balance* balance;
+	BankClient* cliente;
+
+};
+
+class Bank
+{
 	char* name;
 	BankClient[]* list_clients;
 	BankAccount[]* list_accounts;
+	int How_many_client; 
+	int How_many_account;
+	int initial_accounts;
+	int initial_clients; 
+
+	Bank();
+	~Bank();
 
 	bool create_client();
 
@@ -28,5 +44,9 @@
 
 	bool transfer_account();	
 
+	bool id_account_exist(int id_account){}
+	
+};
+	
 #endif
 
