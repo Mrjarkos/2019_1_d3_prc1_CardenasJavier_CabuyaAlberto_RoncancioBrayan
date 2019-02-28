@@ -275,3 +275,20 @@
 			return NULL;
 		}
 	}
+
+	
+
+	BankClient* Bank::select_client_lastName(char* lastName){
+
+		if(id_client_exist(id_client)){
+			for(int i=0; i<How_many_client; i++){
+				if (lastName==list_clients[i]->lastName)
+				{
+					return list_clients[i];
+				}
+			}
+		}
+		else{
+			return NULL;
+		}
+	}
