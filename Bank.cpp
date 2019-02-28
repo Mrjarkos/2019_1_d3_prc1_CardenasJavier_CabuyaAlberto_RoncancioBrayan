@@ -123,11 +123,11 @@
 
 	}
 
-	bool Bank::transfer_money(int id_account1, char* key1, int id_account2, int amount){
+	bool Bank::transfer_money(int id_account1, char* key1, int id_account2, Bank* banco, int amount){
 		BankAccount* cuenta1;
 		BankAccount* cuenta2;
 		cuenta1 = select_count(id_account1);
-		cuenta2 = select_count(id_account2);
+		cuenta2 = banco->select_count(id_account2);
 			if(cuenta1 == NULL || cuenta2 == NULL){
 				return false;
 			}

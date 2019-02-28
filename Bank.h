@@ -44,7 +44,7 @@ public:
 
 	int withdrawal(int, int, char*);
 
-	bool transfer_money(int, char*, int, int);	
+	bool transfer_money(int, char*, int, Bank* banco, int);	
 
 	bool id_account_exist(int);
 	
