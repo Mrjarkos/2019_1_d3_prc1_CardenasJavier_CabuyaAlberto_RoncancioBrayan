@@ -265,7 +265,7 @@
 
 		if(id_client_exist(id_client)){
 			for(int i=0; i<How_many_client; i++){
-				if (id_client==list_clients[i]->id_client)
+				if (id_client==list_clients[i]->get_lastName())
 				{
 					return list_clients[i];
 				}
