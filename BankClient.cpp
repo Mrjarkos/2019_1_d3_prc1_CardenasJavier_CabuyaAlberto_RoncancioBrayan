@@ -1,7 +1,1 @@
-class BankClient
-{
-public:
-	BankClient();
-	~BankClient();
-	
-};
+#include "BankClient.h"

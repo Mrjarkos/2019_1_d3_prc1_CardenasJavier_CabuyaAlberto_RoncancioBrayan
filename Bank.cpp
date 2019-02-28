@@ -1,61 +1,47 @@
 #include "Bank.h"
 
-class Bank
-{
-	char* name;
-	BankClient[]* list_clients;
-	BankAccount[]* list_accounts;
-	int How_many_client; //Me indica cuantos clientes hay
-	int How_many_account; //Me indica cuantas cuentas hay
-	int initial_accounts; // con cuantas cuentas maximo puedo empezar
-	int initial_clients; // con cuantas cuentas maximo puedo empezar
 
-public:
-	Bank(char* _name, BankClient[]* _list_clients, BankAccount[]* _list_accounts){
+	Bank::Bank(char* name, BankClient** list_clients, BankAccount** list_accounts){
 		int n = 20;
 		initial_accounts = n;
 		initial_clients = n;
 
-		name = _name;
+		this->name = name;
 
-		if (_list_accounts!=NULL){
-			list_accounts = _list_accounts;
+		if (list_accounts!=NULL){
+			this->list_accounts = list_accounts;
 			How_many_account = sizeof(list_accounts)/sizeof(*list_accounts);
 		}
 		else{
 			How_many_account = 0;
-			list_accounts = new BankAccount[initial_accounts]*;	
+			this->list_accounts = new BankAccount*[initial_accounts];	
 			}
 
 
-		if (_list_clients!=NULL){
-			list_clients = _list_clients;
+		if (list_clients!=NULL){
+			this->list_clients = list_clients;
 			How_many_client = sizeof(list_clients)/sizeof(*list_clients);
 		}
 		else{
 			How_many_client = 0;
-			list_clients = new BankAccount[initial_accounts]*;	
+			this->list_clients = new BankClient*[initial_accounts];	
 			}
-
 	};
 
-	~Bank();
-
-	char* get_name(){
+	char* Bank::get_name(){
 		return name;
 	}
 
-	bool create_client(){
-		BankClient ciente = new BankClient();
+	bool Bank::create_client(){
 	}
 
-	bool update_client(){}
+	bool Bank::update_client(){}
 
-	BankClient consult_client(){}
+	BankClient* Bank::consult_client(){}
 
-	bool create_account(int id_account, bool accstate, char* key, int* balance, BankClient* cliente){
+	bool Bank::create_account(int id_account, char* key, BankClient* cliente, int initial_value){
 
-		BankAccount account = new BankAccount(id_account, accstate, key, balance, cliente);
+		BankAccount* account = new BankAccount(id_account, key, cliente, initial_value);
 		How_many_account++;
 
 		if(id_account_exist(id_account)){
@@ -64,11 +50,11 @@ public:
 
 		if(How_many_account >= initial_accounts-1){
 			initial_accounts+=20;
-			BankAccount[]* list_accounts_aux = list_accounts;
-			free(list_accounts);
-			list_accounts = new BankAccount[initial_accounts]*;
+			BankAccount** list_accounts_aux = list_accounts;
+			delete list_accounts;
+			list_accounts = new BankAccount*[initial_accounts];
 			list_accounts = list_accounts_aux;
-			free(list_accounts_aux);
+			delete list_accounts_aux;
 		} 
 
 		list_accounts[How_many_account] = account; 
@@ -76,57 +62,105 @@ public:
 
 	}
 
-	Account_information consult_account(int id_account, char* key){
-			Account_information account;
+ 	Account_information* Bank::consult_account(int id_account, char* key){
+			Account_information* account;
+			BankAccount *cuenta;
 
-			for(int i=0; i<How_many_account; i++){
-				if(id_account == BankAccount[i].Accountnumber){
-					if(account.CheckKey(key)){
-					account.state = BankAccount[i].ConsultState();						
-					account.balance = BankAccount[i].ConsultBalance();
-					account.cliente = BankAccount[i].ConsultUser();
-					}
+			cuenta = select_count(id_account);
 
-			
+			if(cuenta!=NULL){
+				if(cuenta->CheckKey(key)==true){
+					account->id_account = id_account;
+					account->state = cuenta->ConsultState();						
+					account->balance = cuenta->ConsultBalance();
+					account->cliente = cuenta->ConsultUser();
+					return account;
 				}
 			}
 
-			return account;
+			return NULL;
 	}
 
-	bool block_unblock_account(bool block, BankAccount* account, char* key){
-		if(account.CheckKey(key)){
-			if(block){
-				account.Block();
+	bool Bank::block_unblock_account(int id_account, char* key, bool block){
+		BankAccount* account;
+		account = select_count(id_account);
+		if(account!=NULL){
+			if(account->CheckKey(key)){
+				if(block){
+					account->Block();
+				}
+				else{
+					account->UnBlock();
+				}	
+				return true;
 			}
-			else{
-				account.Unblock();
-			}	
-			return true;
 		}
 		return false;
 	}
 
-	bool deposit(int id_account, int amount){
+	bool Bank::deposit(int id_account, int amount){
+		BankAccount* cuenta;
+		cuenta = select_count(id_account);
 
-
-		
-
-		account.deposit();
+		if(cuenta != NULL){
+			cuenta->deposit(amount);
+			return true;
+			
+		}
+		return false;	
 	}
 
-	int withdrawal(){}
+	int Bank::withdrawal(int id_account, int amount, char* key){
+		BankAccount* cuenta;
+		cuenta = select_count(id_account);
+		if(cuenta != NULL){
+			if(cuenta->CheckKey(key)){
+				cuenta->Retirar(amount);
+				return cuenta->ConsultBalance();
+			}
+		}
+		return -1;
 
-	bool transfer_account(){}	
+	}
 
-	bool id_account_exist(int id_account){
+	bool Bank::transfer_money(int id_account1, char* key1, int id_account2, int amount){
+		BankAccount* cuenta1;
+		BankAccount* cuenta2;
+		cuenta1 = select_count(id_account1);
+		cuenta2 = select_count(id_account2);
+			if(cuenta1 == NULL || cuenta2 == NULL){
+				return false;
+			}
+			else{
+				if(cuenta1->CheckKey(key1)){
+					cuenta1->Retirar(amount);
+					cuenta2->deposit(amount);
+					return true;	
+				}
+			
+				return false;
+			}
+	}	
 
+	bool Bank::id_account_exist(int id_account){
 		for(int i=0; i<How_many_account; i++){
-			if(id_account == BankAccount[i].Accountnumber){
+			if(id_account == list_accounts[i]->accountnumber){
 				return true;
 			}
 		}
 	return false;
 	}
 
-};
+	BankAccount* Bank::select_count(int id_account){
+		if(id_account_exist(id_account)){
+			for(int i=0; i<How_many_account; i++){
+				if (id_account==list_accounts[i]->accountnumber)
+				{
+					return list_accounts[i];
+				}
+			}
+		}
+		else{
+			return NULL;
+		}
+	}

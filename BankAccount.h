@@ -1,38 +1,36 @@
 
-#ifndef ACCOUNT_H
-#define ACCOUNT_H
+#ifndef BANKACCOUNT_H
+#define BANKACCOUNT_H
+
+
 #include "BankClient.h"
 
-struct Balance
- {
- 	int Activos:
- 	int Debe; 
- 	int Saldo;
- }; 
-
-class BankAccount(){
+class BankAccount{
 
 	//Propiedades
-	int Accountnumber;
-	bool AccState; //true = activo, false = inactivo
-	char*  Key;
-	char* Owner;
-	Balance balance;
+
+	bool accState; //true = activo, false = inactivo
+	char* key;
+	int balance;
+	BankClient *client;
+
+public:
+	int accountnumber;
 
 	//Constructor
-	BankAccount(int accountnumber, bool accstate, char* key, char* Owner);
+	BankAccount(int, char*, BankClient*, int);
 
 	//Metodos
- 	void Blockacc();
- 	void UnBlockacc();
- 	bool CheckKey(char* Keyint);
- 	void deposit(int moneyVal);
- 	void Retirar(int moneyVal);
- 	void updateKey(char* accountkey);
+ 	void Block();
+ 	void UnBlock();
+ 	bool CheckKey(char*);
+ 	void deposit(int);
+ 	bool Retirar(int);
+ 	bool updateKey(char*);
 	bool ConsultState();
-	Balance* ConsultBalance();
-	char* ConsultUser();
-	void ChangeClient(BankClient* client);
-}
+	int ConsultBalance();
+	BankClient* ConsultUser();
+	void ChangeClient(BankClient*);
+};
 
 #endif

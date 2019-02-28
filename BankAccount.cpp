@@ -1,90 +1,68 @@
 
 #include "BankAccount.h" 
 
-class BankAccount(){
-
-	bool AccState;
-	char*  Key;
- 	Balance balance;
-	char* Owner;
-
-public: 
-	int Accountnumber; 
-
-	BankAccount(int accountnumber, bool accstate, char* key, char* client, int initial_value){
-		Accountnumber= accountnumber;
-		AccState=accstate;
-		Key= key;
-		balance.Activos=initial_value;
-		balance.Debe=0;
-		balance.Saldo = balance.Activos-balance.Debe;
-		Owner= client;
+	BankAccount::BankAccount(int accountnumber, char* key, BankClient *client, int initial_value){
+		this->accountnumber = accountnumber;
+		accState = true;
+		this->key = key;
+		balance = initial_value;
+		this->client = client;
 	} 
 
-	void Block(){
-		AccState= false;
+	void BankAccount::Block(){
+		accState = false;
 	}
 
-	void UnBlock(){
-		AccState= true;
+	void BankAccount::UnBlock(){
+		accState = true;
 	}
 
-	bool CheckKey(char* Keyint){
-		char* Keyuser = &Key;
-		if(Keyuser == Keyint){
+	bool BankAccount::CheckKey(char* key){
+		if(this->key == key){
 			return true;
 		}
 		else{
 			return false;
 		}
-
 	}
 
-	void deposit(int moneyVal){
-		if(balance.deuda>0){
-			balance.deuda-= moneyVal;
-			if(balance.deuda<0){
-				balance.Activos= (-1)*(balance.deuda);
-			}
+	void BankAccount::deposit(int amount){
+		balance += amount;
+	}
+
+	bool BankAccount::Retirar(int amount){				//Resta al activo y compara si hay deuda	
+		if(balance-amount<0){
+			return false;
 		}
 		else{
-			balance.Activos+= moneyVal;
-		}			//suma al activo de la cuenta lo que se ingresa
-}
-
-	void Retirar(int moneyVal){				//Resta al activo y compara si hay deuda
-		balance.Activos-= moneyVal;
-		if(balance.Activos<=0){ 
-			balance.Debe+=(-1)*(balance.Activos);
-			balance.Activos=0;
-		 }
+			balance-=amount;
+			return true;
+		}
 	}
 
-	bool ConsultState(){
-		bool estado = AccState;
-		return estado;
+	bool BankAccount::ConsultState(){
+		return this->accState;
 	}
 
-	Balance* ConsultBalance(){
-		Balance* Balanceclient = &balance;
-		Balanceclient*.Saldo = Balanceclient.Activos - Balanceclient.Debe; 
-		return Balanceclient;
+	int BankAccount::ConsultBalance(){
+		return this->balance;
 	}
 
-	char* ConsultUser(){
-		char* client = Owner;
-		return client;
+	BankClient* BankAccount::ConsultUser(){
+		return this->client;
 	}
 
-	void ChangeClient(BankClient* client){
-		Client= client;
+	void BankAccount::ChangeClient(BankClient *client){
+		this->client = client;
 	}
 
-	void updateKey(char* accountkey){
-		char* newKey= accountkey;
-		AccState= newKey;
+	bool BankAccount::updateKey(char* key){
+
+		if(sizeof(key)/sizeof(*key)!=5){
+			return false;
+		}else{
+			 this->key = key;
+			return true;	
+		}
+		
 	}
-
-
-
-}
