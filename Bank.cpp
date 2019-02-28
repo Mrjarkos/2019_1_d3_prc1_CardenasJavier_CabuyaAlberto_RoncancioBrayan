@@ -91,7 +91,7 @@
 	}
 
 	bool Bank::update_client(BankClient* cliente, char* firstName, char* lastName, char* id, int age){
-		cliente->Update_data(firstName, lastName, id, age, cliente-> id_client);
+		cliente->Update_data(firstName, lastName, id, age, cliente->get_accounts());
 		return true;
 	}
 
@@ -291,4 +291,8 @@
 		else{
 			return NULL;
 		}
+	}
+
+	int Bank::get_how_accounts(){
+		return How_many_account;
 	}
