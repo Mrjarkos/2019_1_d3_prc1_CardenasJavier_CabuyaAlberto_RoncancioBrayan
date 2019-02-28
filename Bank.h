@@ -4,12 +4,22 @@
 
 #include "BankAccount.h"
 #include "BankClient.h"
+#include <iostream>
+#include <string>
+#include <sstream>
 
 struct Account_information{
-	int id_account;
+	char* id_account;
 	bool state;
 	int balance;
 	BankClient* cliente;
+};
+
+struct Client_information{
+	char* firstName;
+	char* lastName;
+	double id;
+	BankAccount** accounts;
 };
 
 class Bank
@@ -30,25 +40,33 @@ public:
 
 	bool create_client();
 
+	bool create_client(char*, char*, char*, int, char**); 
+
+	bool create_client(char*, char*, char*, int, char*, char*, int);
+
 	bool update_client();
 
 	BankClient* consult_client();
 
-	bool create_account(int, char*, BankClient*, int);
+	bool create_account(char*, char*, BankClient*, int);
 
-	Account_information* consult_account(int, char*);
+	Account_information* consult_account(char*, char*);
 
-	bool block_unblock_account(int, char*, bool);
+	bool block_unblock_account(char*, char*, bool);
 
-	bool deposit(int, int);
+	bool deposit(char*, int);
 
-	int withdrawal(int, int, char*);
+	int withdrawal(char*, int, char*);
 
-	bool transfer_money(int, char*, int, Bank* banco, int);	
+	bool transfer_money(char*, char*, char*, Bank* banco, int);	
 
-	bool id_account_exist(int);
+	bool id_account_exist(char*);
+
+	bool id_client_exist(char*);
 	
-	BankAccount* select_count(int);
+	BankAccount* select_count(char*);
+
+	BankClient* select_client(char*);
 };
 	
 #endif

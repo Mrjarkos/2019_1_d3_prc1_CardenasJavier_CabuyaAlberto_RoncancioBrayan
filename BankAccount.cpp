@@ -1,12 +1,13 @@
 
 #include "BankAccount.h" 
+#include "BankClient.h"
 
-	BankAccount::BankAccount(int accountnumber, char* key, BankClient *client, int initial_value){
+	BankAccount::BankAccount(char* accountnumber, char* key, char* id_client, int initial_value){
 		this->accountnumber = accountnumber;
 		accState = true;
 		this->key = key;
 		balance = initial_value;
-		this->client = client;
+		this->id_client = id_client;
 	} 
 
 	void BankAccount::Block(){
@@ -48,17 +49,17 @@
 		return this->balance;
 	}
 
-	BankClient* BankAccount::ConsultUser(){
-		return this->client;
+	char* BankAccount::ConsultUser(){
+		return this->id_client;
 	}
 
-	void BankAccount::ChangeClient(BankClient *client){
-		this->client = client;
+	void BankAccount::ChangeClient(char* client){
+		this->id_client = id_client;
 	}
 
 	bool BankAccount::updateKey(char* key){
 
-		if(sizeof(key)/sizeof(*key)!=5){
+		if(sizeof(key)/sizeof(*key)!=4){
 			return false;
 		}else{
 			 this->key = key;

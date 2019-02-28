@@ -2,7 +2,6 @@
 #ifndef BANKACCOUNT_H
 #define BANKACCOUNT_H
 
-
 #include "BankClient.h"
 
 class BankAccount{
@@ -12,13 +11,13 @@ class BankAccount{
 	bool accState; //true = activo, false = inactivo
 	char* key;
 	int balance;
-	BankClient *client;
+	char* id_client;
 
 public:
-	int accountnumber;
+	char* accountnumber;
 
 	//Constructor
-	BankAccount(int, char*, BankClient*, int);
+	BankAccount(char*, char*, char*, int);
 
 	//Metodos
  	void Block();
@@ -29,8 +28,8 @@ public:
  	bool updateKey(char*);
 	bool ConsultState();
 	int ConsultBalance();
-	BankClient* ConsultUser();
-	void ChangeClient(BankClient*);
+	char* ConsultUser();
+	void ChangeClient(char*);
 };
 
 #endif
