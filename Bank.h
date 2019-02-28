@@ -18,7 +18,7 @@ struct Account_information{
 struct Client_information{
 	char* firstName;
 	char* lastName;
-	double id;
+	char* id_client;
 	BankAccount** accounts;
 };
 
@@ -38,15 +38,13 @@ public:
 
 	char* get_name();
 
-	bool create_client();
-
 	bool create_client(char*, char*, char*, int, char**); 
 
 	bool create_client(char*, char*, char*, int, char*, char*, int);
 
-	bool update_client();
+	bool update_client(BankClient*, char*, char*, char*, int);
 
-	BankClient* consult_client();
+	Client_information* consult_client(char* id_client);
 
 	bool create_account(char*, char*, BankClient*, int);
 

@@ -68,7 +68,7 @@
 			return false;
 		}
 
-		if(How_many_client >= initial_accounts-1){
+		if(How_many_client > initial_accounts){
 			initial_clients+=20;
 			BankClient** list_clients_aux = list_clients;
 			delete list_clients;
@@ -90,9 +90,40 @@
 		return true;
 	}
 
-	bool Bank::update_client(){}
+	bool Bank::update_client(BankClient* cliente, char* firstName, char* lastName, char* id, int age){
+		cliente->Update_data(firstName, lastName, id, age, cliente-> id_client);
+		return true;
+	}
 
-	BankClient* Bank::consult_client(){}
+	Client_information* Bank::consult_client(char* id_client){
+		Client_information* client;
+			BankClient* cliente;
+			BankAccount** list_cuentas;
+
+			cliente = select_client(id_client);
+
+			if(cliente!=NULL){
+
+					client->firstName = cliente->get_firstName();
+					client->lastName = cliente->get_lastName();
+					client->id_client = cliente->get_id();
+
+					char** cuentas = cliente->get_accounts();
+
+					list_cuentas = new BankAccount*[sizeof(cuentas)/sizeof(*cuentas)];
+
+					for(int i=0; i<sizeof(cuentas)/sizeof(*cuentas);i++){
+						list_cuentas[i] = select_count(cuentas[i]);
+					}
+
+					client->accounts = list_cuentas;
+
+					return client;
+				
+			}
+
+			return NULL;
+	}
 
 	bool Bank::create_account(char* id_account, char* key, BankClient* cliente, int initial_value){
 
@@ -103,7 +134,7 @@
 			return false;
 		}
 
-		if(How_many_account >= initial_accounts-1){
+		if(How_many_account > initial_accounts){
 			initial_accounts+=20;
 			BankAccount** list_accounts_aux = list_accounts;
 			delete list_accounts;

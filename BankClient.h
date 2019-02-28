@@ -23,7 +23,7 @@ public:
 		
 	BankClient(char*, char*, char*, int, char**);
 
-	void Update_data(char*, char*, char*, int, char**);
+	void Update_data(char*, char*, char*, int, char*);
 
 	void Add_account(char*);
 
