@@ -7,7 +7,6 @@
 
 using namespace std;
 
-
 char exitkey;
 char optionkey;
 char* key ;
