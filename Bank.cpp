@@ -280,9 +280,9 @@
 
 	BankClient* Bank::select_client_lastName(char* lastName){
 
-		if(id_client_exist(id_client)){
+		if(id_client_exist(lastName)){
 			for(int i=0; i<How_many_client; i++){
-				if (lastName==list_clients[i]->lastName)
+				if (lastName==list_clients[i]->get_lastName())
 				{
 					return list_clients[i];
 				}
