@@ -1,12 +1,3 @@
-#include "Bank.h"
-#include <curses.h>
-
-using namespace std;
-
-char exitkey;
-char optionkey;
-char* key ;
-char* accnum;
 
 int main(int argc, char const *argv[])
 {
@@ -215,9 +206,9 @@ char* ask_accountnum(){
 				char* pointaccnum=accnum;
 				return pointaccnum;
 }
-string ask_key(){
+char* ask_key(){
 	cout<< "\nInserte su clave"<< endl;
-	cin>> string enteredkey;
+	cin>> char* enteredkey;
 	return enteredkey;
 }
 int ask_deposit_money(){
