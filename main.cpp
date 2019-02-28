@@ -1,8 +1,4 @@
-#include "Bank.h"
-char exitkey;
-char optionkey;
-char * key ;
-char* accnum;
+
 int main(int argc, char const *argv[])
 {
 	char name1 []= "Banco ccv";
