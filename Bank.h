@@ -65,6 +65,8 @@ public:
 	BankAccount* select_count(char*);
 
 	BankClient* select_client(char*);
+	
+	BankClient* select_client_lastName(char*);
 };
 	
 #endif
