@@ -34,6 +34,7 @@
 
 	bool Bank::create_client(char* firstName, char* lastName, char* id, int age, char** accounts){ //si la cuenta ya esta creada
 		BankClient* cliente = new BankClient(firstName, lastName, id, age, accounts);
+
 		How_many_client++;
 
 		if(id_client_exist(id)){
@@ -61,10 +62,15 @@
 	}
 
 	bool Bank::create_client(char* firstName, char* lastName, char* id, int age, char* id_account, char* key, int initial_value){
+	
 		BankClient* cliente = new BankClient(firstName, lastName, id, age, NULL);
-		How_many_client++;
 
-		if(id_client_exist(id)){
+		
+		
+		bool clients_id=id_client_exist(id);
+		
+		if(clients_id){
+					
 			return false;
 		}
 
@@ -75,18 +81,17 @@
 			list_clients = new BankClient*[initial_clients];
 			list_clients = list_clients_aux;
 			delete list_clients_aux;
+					
 		} 
-
 		bool a = create_account(id_account, key, cliente, initial_value);
-
 		 if(!a){
 		 	return false;
 		 }
-
-		cliente->Add_account(list_accounts[How_many_account]->accountnumber);
+		cliente->Add_account(list_accounts[How_many_account]->accountnumber);//problemas
 		
-
+		std::cout <<"exito"<<std::endl;
 		list_clients[How_many_client] = cliente;
+		How_many_client++;
 		return true;
 	}
 
@@ -128,9 +133,9 @@
 	bool Bank::create_account(char* id_account, char* key, BankClient* cliente, int initial_value){
 
 		BankAccount* account = new BankAccount(id_account, key, cliente->id_client, initial_value);
-		How_many_account++;
 
-		if(id_account_exist(id_account)){
+		bool accounts_id=id_account_exist(id_account);
+		if(accounts_id){   
 			return false;
 		}
 
@@ -144,6 +149,7 @@
 		} 
 
 		list_accounts[How_many_account] = account; 
+		How_many_account++;
 		return true;
 
 	}
@@ -236,9 +242,10 @@
 		}
 	return false;
 	}
-	
+
 
 	bool Bank::id_client_exist(char* id_client){
+
 		for(int i=0; i<How_many_client; i++){
 			if(id_client == list_clients[i]->id_client){
 				return true;
