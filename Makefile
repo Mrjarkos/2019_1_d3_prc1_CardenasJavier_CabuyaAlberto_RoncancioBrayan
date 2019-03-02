@@ -1,7 +1,7 @@
 all: main
 	
 main: main.o Bank.o BankAccount.o BankClient.o
-	g++ -o main Bank.o BankAccount.o BankClient.o
+	g++ -o main main.o  Bank.o BankAccount.o BankClient.o -lncurses
 
 main.o: main.cpp
 	g++ -c main.cpp

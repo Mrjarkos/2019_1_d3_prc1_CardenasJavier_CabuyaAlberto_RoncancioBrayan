@@ -1,12 +1,14 @@
 
 #include "main.h"
- 
-int main(int argc, char *argv[])
+
+int main(int argc, char **argv)
 {
-	char* name1= "Banco ccv";
-	char* name2= "Cranks Bank";
-	Bank* banco1= new Bank(name1, NULL, NULL);
-	Bank* banco2= new Bank(name2, NULL, NULL);
+	char name1 []= "Banco ccv";
+	char name2 []= "Cranks Bank";
+	char* Name1= name1;
+	char* Name2= name2;
+	Bank* banco1= new Bank(Name1, NULL, NULL);
+	Bank* banco2= new Bank(Name2, NULL, NULL);
 	do{
 		cout<<"Digite 1 para probar banco1\n Digite 2 para probar banco2"<<endl;
 		cin>>optionkey;

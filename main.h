@@ -6,12 +6,11 @@
 #include <curses.h>
 
 using namespace std;
-
 char exitkey;
 char optionkey;
 char* key ;
 char* accnum;
-
+int main (int, char**);
 char* ask_name();
 char* ask_lastname();
 int ask_age();
