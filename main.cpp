@@ -1,7 +1,7 @@
 
 #include "main.h"
  
-int main(int argc, char const *argv[])
+int main(int argc, char *argv[])
 {
 	char* name1= "Banco ccv";
 	char* name2= "Cranks Bank";
@@ -56,46 +56,109 @@ int main(int argc, char const *argv[])
 						key = ask_key();
 						int initial_amount = ask_deposit_money();
 
-					banco1-> create_client(nameclient, lastnameclient, id_client, age, id_account, key, initial_amount);
-				}
+						banco1-> create_client(nameclient, lastnameclient, id_client, age, id_account, key, initial_amount);
+					}
 				break;
 				case 'u':{
-					banco1-> update_client();
-				}
+						cout<< "\nInserte nombre del cliente:"<< endl;
+						char* nameclient;
+						cin>> nameclient;
+						
+
+						cout<< "\nInserte apellido del cliente:"<< endl;
+						char* lastnameclient;
+						cin>> lastnameclient;
+					
+						cout<< "\nInserte numero de identificacion del cliente:"<< endl;
+						
+						cin>> id_client;
+					
+						cout<< "\nInserte edad del cliente:"<< endl;
+						int age;
+						cin>> age;
+						bool  clinetstate= banco1->id_client_exist(id_client);
+						if(clinetstate){
+							cout<< "\n A continuacion iserte sus nuevos datos"<<endl;
+							char* newname= ask_name();
+
+							cout<< "\nInserte apellido del cliente:"<< endl;
+							char* newlastnameclient;
+							cin>> newlastnameclient;
+
+							char* newid=ask_id();
+
+							int newage= ask_age();
+
+							BankClient* cliented =banco1->select_client(id_client);
+							banco1-> update_client(cliented, newname, newlastnameclient, newid, newage);
+						}
+						
+						else {
+							cout<<"\ncliente no encontrado"<<endl;
+						}
+
+					}
 				break; 
 				case 'a':{
 					char* nameclient=ask_name();
 					char* lastnameclient= ask_lastname();
 					accnum= ask_accountnum();
 					int age= ask_age();
-					char* id_account= ask_id();
-					int money= ask_deposit_money();
-					key= ask_key();
-					BankClient cliente= new BankClient(nameclient, lastnameclient,accnum, age, id_account,money);
-					 banco1-> create_client(BankClient* clientepoint= cliente);
-					 cout<<"Cliente añadido"<<endl;
+					char* client_id= ask_id_client();
+					bool clientexists= banco1-> id_client_exist(client_id);
+					if(clientexists){
+							BankClient* clientee= banco1->select_client(client_id);
+							char* id_account= ask_id();
+							int money= ask_deposit_money();
+							key= ask_key();
+							bool createclientstate= banco1->create_account(id_account, key, clientee, money );
+							 if(createclientstate){
+							 cout<<"\nCuenta añadida"<<endl;
+							}
+							else {
+								cout<<"\n No se pudo realizar la operacion"<<endl;
+							}
+
+					}
+					else{
+						cout<<"\nCliente no encontrado"<<endl;
+					}
 				}
 				break;
 				case 't':{
 					accnum=ask_accountnum();
 						key= ask_key();
 					cout<< "\nInserte el numero de cuenta a donde va atransferir"<<endl;
-					cin >>int accnum2;
+					char* accnum2;
+					cin >> accnum2;
 						cout<< "\nInserte Banco "<< endl;
-						cin>> string enteredkey;
-						char*bankn= enteredkey;
-						if(bankn== banco1->name){
-							Bank * bancopunt= banco1;
+						char* enteredkey;
+						cin>> enteredkey;
+						Bank* bancopunt;
+						int money;
+						if(enteredkey== banco1->get_name()){
+								bancopunt= banco1;
+								money= ask_deposit_money();
+								bool transferstate= banco1->transfer_money(accnum,key, accnum2, bancopunt, money );
+								if(transferstate){
+									cout<<"\nTransferencia realizada"<<endl;
+								}
+								else { cout<< "\nError en la transferencia"<< endl;}
+							}
+						else if (enteredkey== banco2-> get_name()){
+							bancopunt= banco2;
+							money= ask_deposit_money();
+							bool transferstate= banco1->transfer_money(accnum,key, accnum2, bancopunt, money );
+								if(transferstate){
+									cout<<"\nTransferencia realizada"<<endl;
+								}
+								else { cout<< "\nError en la transferencia"<< endl;}
+							}
+						else {
+							cout<<"\n Banco no encontrado"<<endl;
 						}
-						else (bankn== banco2-> name2){
-							Bank* bancopunt= banco2;
-						}
-					int money= ask_deposit_money();
-					bool transferstate= banco1->trasfer_money(accnum,key, accnum2, bancopunt, money );
-					if(transferstate){
-						cout<<"\nTransferencia realizada"<<endl;
-					}
-					else { cout<< "\nError en la transferencia"<< endl;}
+
+				
 				}
 					break;
 				case 'e':{
@@ -105,19 +168,22 @@ int main(int argc, char const *argv[])
 					bool askopstate=banco1->block_unblock_account(accnum,key, status);
 					if(askopstate) cout<<"\nProceso realizado correctamente"<<endl;
 					else cout<<"\nProceso no completado satisfactoriamente"<<endl;
+				}
 					break;
-					case 'd':
+					case 'd':{
 					accnum= ask_accountnum();
 					int money= ask_deposit_money();
 					bool status= banco1-> deposit(accnum, money);
 					if(status) cout<<"\nProceso realizado correctamente"<<endl;
 					else cout<<"\nProceso no completado satisfactoriamente"<<endl;
+				}
+
 					break;
-					case 'r':
+					case 'r':{
 					accnum= ask_accountnum();
 					key= ask_key();
-					int money ask_deposit_money();
-					int saldo= withdrawal(accnum, money, key);
+					int money =ask_deposit_money();
+					int saldo=banco1->withdrawal(accnum, money, key);
 					ask_consulsaldo(saldo);
 				}
 				break;
@@ -127,164 +193,231 @@ int main(int argc, char const *argv[])
 				break;
 
 			}
-			if(optionkey=="2"){
+		}
+
+		else if(optionkey=='2'){
 			cout<<"Bienvenido al banco 2, ¿que desea hacer?, escoja una de las opciones mostradas\n"<<endl;
 			cout << "Consultar:\n Nombre del banco: n\n"<<endl;
 			cout << "Cliente : p \n Cuenta : c \n Crear cliente : m \n"<<endl;
 			cout << "Actualizar datos cliente: u\n Crear cuenta: a\n Transferir : t\n"<<endl;
 			cout << "Cambiar estado cuenta: e\n Depositar: d\n Retirar dinero: r \n"<<endl;
-
-			}
-			if(optionkey=="2"){
-			cout<<"Bienvenido al banco 2, ¿que desea hacer?, escoja una de las opciones mostradas\n"<<endl;
-			cout << "Consultar:\n Nombre del banco: n\n"<<endl;
-			cout << "Cliente : p \n Cuenta : c \n Crear cliente : m \n"<<endl;
-			cout << "Actualizar datos cliente: u\n Crear cuenta: a\n Transferir : t\n"<<endl;
-			cout << "Cambiar estado cuenta: e\n Depositar: d\n Retirar dinero: r \n"<<endl;
-
 			cin >> optionkey;
 			switch(optionkey){
+				char* id_client;
+
 				case 'n':cout<< "Nombre del banco2=" << banco2-> get_name()<<"\n"<< endl;
 				break;
-				case  'p': banco2-> consult_client();
-				break;
-				case 'c' :
-
-				accnum= ask_accountnum();
-				key= ask_key();
-
-				accnum= &ask_accountnum();
-				key= &ask_key();
-
-				banco2-> consult_account(accnum, key);
-				break; 
-				case 'm': 
-				cout<< "\nInserte nombre de cliente "<< endl;
-				cin>> string client_name;
-				banco2-> create_client();
-				break;
-				case 'u':
-				banco2-> update_client();
-				break; 
-				case 'a':
-				char* nameclient=ask_name();
-				char* lastnameclient= ask_lastname();
-				accnum= ask_accountnum();
-				int age= ask_age();
-				char* id_account= ask_id();
-				int money= ask_deposit_money();
-				key= ask_key();
-				BankClient cliente= new BankClient(nameclient, lastnameclient,accnum, age, id_account,money);
-
-				banco2-> create_client(BankClient* clientepoint= cliente);
-				cout<<"Cliente añadido"<<endl;
-				 banco2-> create_client(BankClient* clientepoint= &cliente);
-				 cout<<"Cliente añadido"<<endl;
-
-				break;
-				case 't':
-				accnum=ask_accountnum();
-					key= ask_key();
-				cout<< "\nInserte el numero de cuenta a donde va atransferir"<<endl;
-				cin >>int accnum2;
-					cout<< "\nInserte 	nombre banco \n Bnacos disponibles:\n "<< banco1-> get_name() << "\n"<< banco2-> get_name()<< endl;
-					cin>> char enteredkey[];
-
-					char*bankn= enteredkey;
-					if(bankn== banco1->name){
-						Bank * bancopunt= banco1;
-					}
-					else (bankn== banco2-> name2){
-						Bank* bancopunt= banco2;
-
-					char*bankn= &enteredkey;
-					if(bankn== banco1->name){
-						Bank * bancopunt= &banco1;
-					}
-					else (bankn== banco2-> name2){
-						Bank* bancopunt= &banco2;
-
-					}
-				int money= ask_deposit_money();
-				bool transferstate= banco2->trasfer_money(accnum,key, accnum2, bancopunt, money );
-				if(transferstate){
-					cout<<"\nTransferencia realizada"<<endl;
+				case  'p':{ 
+					cout<< "Inserte numero de identificacion del cliente" << endl;
+					
+					cin >> id_client;
+					banco2-> consult_client(id_client);
 				}
-				else { cout<< "\nError en la transferencia"<< endl;}
 				break;
-				case 'e':
-				accnum= ask_accountnum();
-				key= ask_key();
-				bool status= ask_status();
-				bool askopstate=banco2->block_unblock_account(accnum,key, status);
-				if(askopstate) cout<<"\nProceso realizado correctamente"<<endl;
-				else cout<<"\nProceso no completado satisfactoriamente"<<endl;
+				case 'c' :{
+					accnum= ask_accountnum();
+					key= ask_key();
+					banco2-> consult_account(accnum, key);
+				}
+				break; 
+				case 'm':{ 
+						cout<< "\nInserte nombre del cliente:"<< endl;
+						char* nameclient;
+						cin>> nameclient;
+					
+						cout<< "\nInserte apellido del cliente:"<< endl;
+						char* lastnameclient;
+						cin>> lastnameclient;
+					
+						cout<< "\nInserte numero de identificacion del cliente:"<< endl;
+						
+						cin>> id_client;
+					
+						cout<< "\nInserte edad del cliente:"<< endl;
+						int age;
+						cin>> age;
+					
+						char* id_account=(char*)banco2->get_how_accounts();
+						key = ask_key();
+						int initial_amount = ask_deposit_money();
+
+					banco2-> create_client(nameclient, lastnameclient, id_client, age, id_account, key, initial_amount);
+				}
 				break;
-				case 'd':
-				accnum= ask_accountnum();
-				int money= ask_deposit_money();
-				bool status= banco2-> deposit(accnum, money);
-				if(status) cout<<"\nProceso realizado correctamente"<<endl;
-				else cout<<"\nProceso no completado satisfactoriamente"<<endl;
+				case 'u':{
+						cout<< "\nInserte nombre del cliente:"<< endl;
+						char* nameclient;
+						cin>> nameclient;
+						
+
+						cout<< "\nInserte apellido del cliente:"<< endl;
+						char* lastnameclient;
+						cin>> lastnameclient;
+					
+						cout<< "\nInserte numero de identificacion del cliente:"<< endl;
+						
+						cin>> id_client;
+					
+						cout<< "\nInserte edad del cliente:"<< endl;
+						int age;
+						cin>> age;
+						bool  clinetstate= banco2->id_client_exist(id_client);
+						if(clinetstate){
+							cout<< "\n A continuacion iserte sus nuevos datos"<<endl;
+							char* newname= ask_name();
+
+							cout<< "\nInserte apellido del cliente:"<< endl;
+							char* newlastnameclient;
+							cin>> newlastnameclient;
+
+							char* newid=ask_id();
+
+							int newage= ask_age();
+
+							BankClient* cliented =banco2->select_client(id_client);
+							banco1-> update_client(cliented, newname, newlastnameclient, newid, newage);
+						}
+						
+						else {
+							cout<<"\ncliente no encontrado"<<endl;
+						}
+
+				}
+				break; 
+				case 'a':{
+					char* nameclient=ask_name();
+					char* lastnameclient= ask_lastname();
+					accnum= ask_accountnum();
+					int age= ask_age();
+					char* client_id= ask_id_client();
+					bool clientexists= banco2-> id_client_exist(client_id);
+					if(clientexists){
+					BankClient* clientee= banco2->select_client(client_id);
+					char* id_account= ask_id();
+					int money= ask_deposit_money();
+					key= ask_key();
+					bool createclientstate= banco2->create_account(id_account, key, clientee, money );
+					 if(createclientstate)
+					 cout<<"\nCuenta añadida"<<endl;
+					else {
+						cout<<"\n No se pudo realizar la operacion"<<endl;
+					}
+
+					}
+					else{
+						cout<<"\nCliente no encontrado"<<endl;
+					}
+				}
 				break;
-				case 'r':
-				accnum= ask_accountnum();
-				key= ask_key();
-				int money ask_deposit_money();
-				int saldo= withdrawal(accnum, money, key);
-				ask_consulsaldo(saldo);
+				case 't':{
+					accnum=ask_accountnum();
+						key= ask_key();
+					cout<< "\nInserte el numero de cuenta a donde va atransferir"<<endl;
+					char* accnum2;
+					cin >> accnum2;
+						cout<< "\nInserte Banco "<< endl;
+						char* enteredkey;
+						cin>> enteredkey;
+						Bank* bancopunt;
+						int money;
+						if(enteredkey== banco1->get_name()){
+								bancopunt= banco1;
+								money= ask_deposit_money();
+								bool transferstate= banco2->transfer_money(accnum,key, accnum2, bancopunt, money );
+								if(transferstate){
+									cout<<"\nTransferencia realizada"<<endl;
+								}
+								else { cout<< "\nError en la transferencia"<< endl;}
+							}
+						else if (enteredkey== banco2-> get_name()){
+							bancopunt= banco2;
+							money= ask_deposit_money();
+							bool transferstate= banco2->transfer_money(accnum,key, accnum2, bancopunt, money );
+								if(transferstate){
+									cout<<"\nTransferencia realizada"<<endl;
+								}
+								else { cout<< "\nError en la transferencia"<< endl;}
+							}
+						else {
+							cout<<"\n Banco no encontrado"<<endl;
+						}
+
+				
+				}
+					break;
+				case 'e':{
+					accnum= ask_accountnum();
+					key= ask_key();
+					bool status= ask_status();
+					bool askopstate=banco2->block_unblock_account(accnum,key, status);
+					if(askopstate) cout<<"\nProceso realizado correctamente"<<endl;
+					else cout<<"\nProceso no completado satisfactoriamente"<<endl;
+				}
+					break;
+					case 'd':{
+					accnum= ask_accountnum();
+					int money= ask_deposit_money();
+					bool status= banco2-> deposit(accnum, money);
+					if(status) cout<<"\nProceso realizado correctamente"<<endl;
+					else cout<<"\nProceso no completado satisfactoriamente"<<endl;
+				}
+
+					break;
+					case 'r':{
+					accnum= ask_accountnum();
+					key= ask_key();
+					int money =ask_deposit_money();
+					int saldo=banco1->withdrawal(accnum, money, key);
+					ask_consulsaldo(saldo);
+				}
 				break;
-				default:
-				cout<<"\nOpcion no valida"<<endl;
+				default:{
+					cout<<"\nOpcion no valida"<<endl;
+				}
 				break;
 
 			}
 		}
+		
+		
 
-	cout << "Presione Esc para salir o cualquier tecla volver al inicio" << endl;
-	exitkey=getch();
+		cout << "Presione Esc para salir o cualquier tecla volver al inicio" << endl;
+		exitkey=getch();
 
-	}while(exitkey==27);
-
-
-	}while(exitkey=NULL;)
+	}while(exitkey!=27);
 
 	return 0;
 }
 char* ask_accountnum(){
 	cout<< "\nInserte su numero de cuenta"<<endl;
-				cin >>char accnum [];
-
-				char* pointaccnum=accnum;
-				return pointaccnum;
+				char*accnum;
+				cin >> accnum ;
+				return accnum;
 }
 char* ask_key(){
 	cout<< "\nInserte su clave"<< endl;
-	cin>> char* enteredkey;
-
-				char* pointaccnum=&accnum;
-				return pointaccnum;
-}
-string ask_key(){
-	cout<< "\nInserte su clave"<< endl;
-	cin>> string enteredkey;
-
+	char* enteredkey;
+	cin>> enteredkey;
 	return enteredkey;
 }
+
 int ask_deposit_money(){
 	cout<<"Digite la cantidad de dinero a depositar"<<endl;
-	cin>> int money;
+	int money;
+	cin>> money;
 	return money;
 }
 bool ask_status(){
 	cout<<"Presione a para activar la cuenta y b para bloquear"<<endl;
-	cin>> char getstatus;
+	char getstatus;
+	cin>> getstatus;
 	if (getstatus= 'a') return TRUE;
 	else return FALSE;
 }
 void ask_consulsaldo(int saldo){
 	cout<<"Desea consultar su saldo? y:si, n:no\n"<<endl;
-	cin>>char op;
+	char op;
+	cin>> op;
 	switch(op){
 		case'y':
 		cout<<"\nSu saldo es: "<< saldo<<endl;
@@ -297,38 +430,33 @@ void ask_consulsaldo(int saldo){
 	} 
 char* ask_name(){
 	cout<<"\nInserte su nombre"<<endl;
-	cin>>char name [];
-
-	char* pointname=name;
-
-	char* pointname=&name;
-
-	return pointname;
+	char* name;
+	cin>> name ;
+	return name;
 }
 char* ask_lastname(){
 	cout<<"\nInserte su apellido"<<endl;
-	cin>>char lastname [];
-
-	char* pointlastname=lastname;
-
-	char* pointlastname=&lastname;
-
-	return pointlastname;
+	char* lastname;
+	cin>> lastname;
+	return lastname;
 }
 int ask_age(){
 	cout<<"\nInsete su edad"<<endl;
-	cin>>int age;
+	int age;
+	cin>> age;
 	return age;
 }
 char* ask_id(){
-	cout<<"\nInserte id de la cuenta nueva"<<endl;
-	cin>>char acc_id [];
-
-	char* pointacc_id=acc_id;
-	return pointacc_id;
+	cout<<"\nInserte id de la cuenta "<<endl;
+	char* acc_id;
+	cin>> acc_id;
+	return acc_id;
 }
 
-	char* pointacc_id=&acc_id;
-	return pointacc_id;
+char* ask_id_client(){
+	cout<<"\nInserte id del cliente "<<endl;
+	char* acc_id;
+	cin>> acc_id;
+	return acc_id;
 }
 

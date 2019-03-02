@@ -16,6 +16,7 @@ char* ask_name();
 char* ask_lastname();
 int ask_age();
 char* ask_id();
+char* ask_id_client();
 void ask_consulsaldo(int);
 bool ask_status();
 int ask_deposit_money();

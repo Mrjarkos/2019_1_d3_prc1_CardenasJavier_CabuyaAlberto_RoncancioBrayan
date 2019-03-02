@@ -236,7 +236,7 @@
 		}
 	return false;
 	}
-
+	
 
 	bool Bank::id_client_exist(char* id_client){
 		for(int i=0; i<How_many_client; i++){
