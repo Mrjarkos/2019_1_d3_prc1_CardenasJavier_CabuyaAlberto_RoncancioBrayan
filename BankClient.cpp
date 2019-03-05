@@ -23,8 +23,8 @@
 
 	void BankClient::Add_account(char* id_account){
 		
-
 		if(how_many_accounts >= initial_accounts-1){
+			
 			initial_accounts+=2;
 			char** list_accounts_aux = id_accounts;
 			delete id_accounts;
@@ -34,7 +34,7 @@
 		} 
 
 		id_accounts[how_many_accounts] = id_account;
-		how_many_accounts++; 
+		how_many_accounts++; 	
 	}
 
 	bool BankClient::Delete_account(char* id_account){

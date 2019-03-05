@@ -1,4 +1,5 @@
 #include "Bank.h"
+#include <string>
 
 
 	Bank::Bank(char* name, BankClient** list_clients, BankAccount** list_accounts){
@@ -87,9 +88,8 @@
 		 if(!a){
 		 	return false;
 		 }
-		cliente->Add_account(list_accounts[How_many_account]->accountnumber);//problemas
+		cliente->Add_account(list_accounts[0]->accountnumber);//problemas
 		
-		std::cout <<"exito"<<std::endl;
 		list_clients[How_many_client] = cliente;
 		How_many_client++;
 		return true;

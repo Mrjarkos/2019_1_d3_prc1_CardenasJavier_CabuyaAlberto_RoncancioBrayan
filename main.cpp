@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 			cout << "Cliente : p \n Cuenta : c \n Crear cliente : m \n"<<endl;
 			cout << "Actualizar datos cliente: u\n Crear cuenta: a\n Transferir : t\n"<<endl;
 			cout << "Cambiar estado cuenta: e\n Depositar: d\n Retirar dinero: r \n"<<endl;
-			cin >> optionkey;
+			cin>>optionkey ;
 			char*id_client = new char [20];
 			switch(optionkey){
 
@@ -26,9 +26,15 @@ int main(int argc, char **argv)
 		break;
 				case  'p':{ 
 					cout<< "Inserte numero de identificacion del cliente" << endl;
-					
+					id_client = new char [20];
 					cin >> id_client;
-					banco1-> consult_client(id_client);
+					try{
+					Client_information* cliente=banco1-> consult_client(id_client);
+					cout<<"exito"<<endl;
+					cout<< "Nombre:"<<cliente->firstName<<endl; 
+				}catch(Client_information){
+					cout<<"Clientre no encontrado"<<endl;
+				}
 				}
 				break;
 				case 'c' :{
