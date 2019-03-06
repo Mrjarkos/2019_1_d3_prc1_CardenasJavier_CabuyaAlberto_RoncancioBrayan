@@ -11,7 +11,7 @@
 		this->firstName=firstName;
 		this->lastName = lastName;
 		this->age=age;
-		this->id_client=id_client;
+		this->id_client=id;
 		this->id_accounts = accounts;
 			if(id_accounts!=NULL){
 				how_many_accounts = sizeof(id_accounts)/sizeof(id_accounts);
@@ -63,4 +63,8 @@
 
 	char** BankClient::get_accounts(){
 		return id_accounts;
+	}
+
+	int BankClient::nAccounts() {
+		return how_many_accounts;
 	}

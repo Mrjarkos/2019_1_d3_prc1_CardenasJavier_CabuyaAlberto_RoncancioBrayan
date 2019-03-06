@@ -37,6 +37,8 @@ public:
 
 	char** get_accounts();
 
+	int nAccounts();
+
 };
 
 #endif

@@ -1,6 +1,9 @@
 
 #include "main.h"
 
+#define TRUE 1
+#define FALSE 0
+
 int main(int argc, char **argv)
 {
 	char name1 []= "Banco ccv";
@@ -10,7 +13,7 @@ int main(int argc, char **argv)
 	Bank* banco1= new Bank(Name1, NULL, NULL);
 	Bank* banco2= new Bank(Name2, NULL, NULL);
 	do{
-		cout<<"Digite 1 para probar banco1\n Digite 2 para probar banco2"<<endl;
+		cout<<"Digite 1 para probar banco1\nDigite 2 para probar banco2"<<endl;
 		cin>>optionkey;
 		if(optionkey=='1'){
 			cout<<"Bienvenido al banco 1, ¿que desea hacer?, escoja una de las opciones mostradas\n"<<endl;
@@ -28,13 +31,20 @@ int main(int argc, char **argv)
 					cout<< "Inserte numero de identificacion del cliente" << endl;
 					id_client = new char [20];
 					cin >> id_client;
-					try{
-					Client_information* cliente=banco1-> consult_client(id_client);
-					cout<<"exito"<<endl;
-					cout<< "Nombre:"<<cliente->firstName<<endl; 
-				}catch(Client_information){
-					cout<<"Clientre no encontrado"<<endl;
-				}
+					Client_information* cliente = banco1->consult_client(id_client);
+					if(cliente==NULL){ cout << "Clientre no encontrado" << endl; }
+					else {
+						
+						cout << "exito" << endl;
+						cout << "Nombre:" << cliente->firstName << endl;
+						cout << "Apellido:" << cliente->lastName << endl;
+						cout << "Id:" << cliente->id_client << endl;
+						cout << "Id de cuentas" << endl;
+						char* a = cliente->accounts[0]->accountnumber;
+						for (int i = 0; i < cliente->nAccount; i++) {
+							cout << "Número de Cuenta [" << i << "] = " << atoi(cliente->accounts[0]->accountnumber) << endl;
+						}
+					}
 				}
 				break;
 				case 'c' :{
@@ -53,34 +63,36 @@ int main(int argc, char **argv)
 						cin>> lastnameclient;
 					
 						cout<< "\nInserte numero de identificacion del cliente:"<< endl;
-						
-						cin>> id_client;
+						char*id = new char[20];
+						cin>> id;
 					
 						cout<< "\nInserte edad del cliente:"<< endl;
 						int age;
 						cin>> age;
 					
-						char*id_account=(char*)banco1->get_how_accounts();
+						char* id_account=(char*)banco1->get_how_accounts();
+						cout << "\nSe le asigno la cuenta Numero: "<< atoi(id_account) << endl;
 						key = ask_key();
 						int initial_amount = ask_deposit_money();
 
-						bool state= banco1-> create_client(nameclient, lastnameclient, id_client, age, id_account, key, initial_amount);
+						bool state= banco1-> create_client(nameclient, lastnameclient, id, age, id_account, key, initial_amount);
 					    if(state){
 					    	cout<<"\nCliente creado"<<endl;
 					    }
 					    else{
 					    	cout<<"\nNo se logoro realizar la accion"<<endl; 
+							banco1->fail_account();
 					    }
 					}
 				break;
 				case 'u':{
 						cout<< "\nInserte nombre del cliente:"<< endl;
-						char* nameclient;
+						char* nameclient = 0;
 						cin>> nameclient;
 						
 
 						cout<< "\nInserte apellido del cliente:"<< endl;
-						char* lastnameclient;
+						char* lastnameclient = 0;
 						cin>> lastnameclient;
 					
 						cout<< "\nInserte numero de identificacion del cliente:"<< endl;
@@ -337,7 +349,7 @@ int main(int argc, char **argv)
 					char* accnum2= new char[20];
 					cin >> accnum2;
 						cout<< "\nInserte Banco "<< endl;
-						char* enteredkey;
+						char* enteredkey = 0;
 						cin>> enteredkey;
 						Bank* bancopunt;
 						int money;
@@ -411,32 +423,32 @@ int main(int argc, char **argv)
 }
 char* ask_accountnum(){
 	cout<< "\nInserte su numero de cuenta"<<endl;
-				char*accnum;
+				char* accnum = 0;
 				cin >> accnum ;
 				return accnum;
 }
 char* ask_key(){
-	cout<< "\nInserte su clave"<< endl;
+	cout<< "\nInserte la clave de su cuenta"<< endl;
 	char* enteredkey= new char[20];
 	cin>> enteredkey;
 	return enteredkey;
 }
 
 int ask_deposit_money(){
-	cout<<"Digite la cantidad de dinero a depositar"<<endl;
+	cout<<"\nDigite la cantidad de dinero a depositar"<<endl;
 	int money;
 	cin>> money;
 	return money;
 }
 bool ask_status(){
-	cout<<"Presione a para activar la cuenta y b para bloquear"<<endl;
+	cout<<"\nPresione a para activar la cuenta y b para bloquear"<<endl;
 	char getstatus;
 	cin>> getstatus;
 	if (getstatus= 'a') return TRUE;
 	else return FALSE;
 }
 void ask_consulsaldo(int saldo){
-	cout<<"Desea consultar su saldo? y:si, n:no\n"<<endl;
+	cout<<"\nDesea consultar su saldo? y:si, n:no\n"<<endl;
 	char op;
 	cin>> op;
 	switch(op){
@@ -445,7 +457,7 @@ void ask_consulsaldo(int saldo){
 		case 'n':
 		break;
 		default:
-		cout<<"\n Opcion no valida"<<endl;
+		cout<<"\nOpcion no valida"<<endl;
 		break;
 	}
 	} 

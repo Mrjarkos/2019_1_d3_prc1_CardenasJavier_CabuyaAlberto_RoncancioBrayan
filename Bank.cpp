@@ -39,6 +39,7 @@
 		How_many_client++;
 
 		if(id_client_exist(id)){
+			std::cout << "\nEl cliente ya existe" << std::endl;
 			return false;
 		}
 		if(accounts == NULL){
@@ -66,12 +67,10 @@
 	
 		BankClient* cliente = new BankClient(firstName, lastName, id, age, NULL);
 
-		
-		
 		bool clients_id=id_client_exist(id);
 		
 		if(clients_id){
-					
+			std::cout << "\nEl cliente ya existe" << std::endl;
 			return false;
 		}
 
@@ -101,18 +100,17 @@
 	}
 
 	Client_information* Bank::consult_client(char* id_client){
-		Client_information* client;
+		Client_information* client = new Client_information();
 			BankClient* cliente;
 			BankAccount** list_cuentas;
-
+			
 			cliente = select_client(id_client);
 
 			if(cliente!=NULL){
-
 					client->firstName = cliente->get_firstName();
 					client->lastName = cliente->get_lastName();
 					client->id_client = cliente->get_id();
-
+					client->nAccount = cliente->nAccounts();
 					char** cuentas = cliente->get_accounts();
 
 					list_cuentas = new BankAccount*[sizeof(cuentas)/sizeof(*cuentas)];
@@ -155,7 +153,7 @@
 	}
 
  	Account_information* Bank::consult_account(char* id_account, char* key){
-			Account_information* account;
+			Account_information* account = new Account_information();
 			BankAccount *cuenta;
 
 			cuenta = select_count(id_account);
@@ -236,7 +234,8 @@
 
 	bool Bank::id_account_exist(char* id_account){
 		for(int i=0; i<How_many_account; i++){
-			if(id_account == list_accounts[i]->accountnumber){
+			char* a = list_accounts[i]->accountnumber;
+			if((*id_account) == (*a)){
 				return true;
 			}
 		}
@@ -247,7 +246,10 @@
 	bool Bank::id_client_exist(char* id_client){
 
 		for(int i=0; i<How_many_client; i++){
-			if(id_client == list_clients[i]->id_client){
+			
+			char* a = list_clients[i]->get_id();
+		
+			if((*id_client) == (*a)){
 				return true;
 			}
 		}
@@ -257,7 +259,8 @@
 	BankAccount* Bank::select_count(char* id_account){
 		if(id_account_exist(id_account)){
 			for(int i=0; i<How_many_account; i++){
-				if (id_account==list_accounts[i]->accountnumber)
+				char* a = list_accounts[i]->accountnumber;
+				if ((*id_account)==(*a))
 				{
 					return list_accounts[i];
 				}
@@ -272,7 +275,8 @@
 
 		if(id_client_exist(id_client)){
 			for(int i=0; i<How_many_client; i++){
-				if (id_client==list_clients[i]->get_lastName())
+				char* a = list_clients[i]->get_id();
+				if ((*id_client) == (*a))
 				{
 					return list_clients[i];
 				}
@@ -300,6 +304,12 @@
 		}
 	}
 
-	int Bank::get_how_accounts(){
-		return How_many_account;
+	int* Bank::get_how_accounts(){
+		//How_many_account++;
+		return &How_many_account;
+	}
+
+
+	void  Bank::fail_account() {
+		//How_many_account--;
 	}

@@ -13,6 +13,11 @@ struct Account_information{
 	bool state;
 	int balance;
 	BankClient* cliente;
+	Account_information() {
+		id_account = 0;
+		state = 0;
+		balance = 0;
+	}
 };
 
 struct Client_information{
@@ -20,6 +25,13 @@ struct Client_information{
 	char* lastName;
 	char* id_client;
 	BankAccount** accounts;
+	int nAccount;
+
+	Client_information() {
+		firstName = 0;
+		lastName = 0;
+		id_client = 0;
+	}
 };
 
 class Bank
@@ -29,6 +41,7 @@ class Bank
 	BankAccount** list_accounts;
 	int How_many_client; 
 	int How_many_account;
+	int next_account;
 	int initial_accounts;
 	int initial_clients; 
 
@@ -68,7 +81,9 @@ public:
 	
 	BankClient* select_client_lastName(char*);
 
-	int get_how_accounts();
+	int* get_how_accounts();
+
+	void fail_account();
 };
 	
 #endif
