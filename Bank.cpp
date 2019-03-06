@@ -248,9 +248,21 @@
 		for(int i=0; i<How_many_client; i++){
 			
 			char* a = list_clients[i]->get_id();
-		
-			if((*id_client) == (*a)){
-				return true;
+				int this_n = sizeof(a)/sizeof(*a);
+				std::cout << "n" << this_n << std::endl;
+
+				int n = sizeof(id_client)/sizeof(*id_client);
+				std::cout << "n" << n << std::endl;
+				if (n==this_n){
+					for (int i = 0; i < n; ++i)
+					{	
+						std::cout << "a[i] "<< a[i] << std::endl;
+						std::cout << "id_client[i] " << id_client[i] << std::endl;
+						if(a[i]!=id_client[i]){
+							return false;
+						}
+					}
+					return true;
 			}
 		}
 	return false;
@@ -260,10 +272,18 @@
 		if(id_account_exist(id_account)){
 			for(int i=0; i<How_many_account; i++){
 				char* a = list_accounts[i]->accountnumber;
-				if ((*id_account)==(*a))
-				{
+				int this_n = sizeof(a)/sizeof(*a);
+				int n = sizeof(id_account)/sizeof(*id_account);
+				if (n==this_n){
+					for (int i = 0; i < n; ++i)
+					{	
+						if(a[i]!=id_account[i]){
+							return NULL;
+						}
+					}
 					return list_accounts[i];
 				}
+				
 			}
 		}
 		else{
@@ -276,8 +296,15 @@
 		if(id_client_exist(id_client)){
 			for(int i=0; i<How_many_client; i++){
 				char* a = list_clients[i]->get_id();
-				if ((*id_client) == (*a))
-				{
+				int this_n = sizeof(a)/sizeof(*a);
+				int n = sizeof(id_client)/sizeof(*id_client);
+				if (n==this_n){
+					for (int i = 0; i < n; ++i)
+					{	
+						if(a[i]!=id_client[i]){
+							return NULL;
+						}
+					}
 					return list_clients[i];
 				}
 			}
@@ -304,7 +331,7 @@
 		}
 	}
 
-	int* Bank::get_how_accounts(){
+	void* Bank::get_how_accounts(){
 		//How_many_account++;
 		return &How_many_account;
 	}

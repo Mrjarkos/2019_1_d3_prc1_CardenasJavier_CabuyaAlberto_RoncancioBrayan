@@ -481,7 +481,7 @@ int ask_age(){
 }
 char* ask_id(){
 	cout<<"\nInserte id de la cuenta "<<endl;
-	char* acc_id = new char[3];
+	char* acc_id;
 	cin>> acc_id;
 	return acc_id;
 }
