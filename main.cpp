@@ -90,17 +90,16 @@ int main(int argc, char **argv)
 				break;
 				case 'u':{
 						cout<< "\nInserte nombre del cliente:"<< endl;
-						char* nameclient = 0;
+						char* nameclient;
 						cin>> nameclient;
-						
 
 						cout<< "\nInserte apellido del cliente:"<< endl;
-						char* lastnameclient = 0;
+						char* lastnameclient;
 						cin>> lastnameclient;
 					
 						cout<< "\nInserte numero de identificacion del cliente:"<< endl;
-						
-						cin>> id_client;
+						char*id;
+						cin>> id;
 					
 						cout<< "\nInserte edad del cliente:"<< endl;
 						int age;
