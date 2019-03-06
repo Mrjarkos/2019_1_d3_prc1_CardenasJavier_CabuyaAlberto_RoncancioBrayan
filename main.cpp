@@ -69,9 +69,12 @@ int main(int argc, char **argv)
 						cout<< "\nInserte edad del cliente:"<< endl;
 						int age;
 						cin>> age;
-					
-						char* id_account=(char*)banco1->get_how_accounts();
+						
+						int a = banco1->get_how_accounts();
+						char* id_account = reinterpret_cast<char*>(&a); 
+
 						cout << "\nSe le asigno la cuenta Numero: "<< atoi(id_account) << endl;
+
 						key = ask_key();
 						int initial_amount = ask_deposit_money();
 
@@ -492,4 +495,3 @@ char* ask_id_client(){
 	cin>> acc_id;
 	return acc_id;
 }
-

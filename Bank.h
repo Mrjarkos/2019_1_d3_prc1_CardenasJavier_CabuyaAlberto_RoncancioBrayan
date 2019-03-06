@@ -81,7 +81,7 @@ public:
 	
 	BankClient* select_client_lastName(char*);
 
-	void* get_how_accounts();
+	int get_how_accounts();
 
 	void fail_account();
 };

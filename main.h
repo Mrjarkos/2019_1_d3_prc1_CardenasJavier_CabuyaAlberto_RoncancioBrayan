@@ -4,8 +4,16 @@
 
 #include "Bank.h"
 #include <curses.h>
+#include <iostream>
+#include <sstream>
+#include <cstring>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 
 using namespace std;
+
 char exitkey;
 char optionkey;
 char* key ;
@@ -21,5 +29,4 @@ bool ask_status();
 int ask_deposit_money();
 char* ask_key();
 char* ask_accountnum();
-
 #endif

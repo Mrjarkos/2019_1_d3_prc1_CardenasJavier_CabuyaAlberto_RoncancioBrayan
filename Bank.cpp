@@ -87,7 +87,7 @@
 		 if(!a){
 		 	return false;
 		 }
-		cliente->Add_account(list_accounts[0]->accountnumber);//problemas
+		cliente->Add_account(list_accounts[How_many_account-1]->accountnumber);//problemas
 		
 		list_clients[How_many_client] = cliente;
 		How_many_client++;
@@ -331,9 +331,9 @@
 		}
 	}
 
-	void* Bank::get_how_accounts(){
+	int Bank::get_how_accounts(){
 		//How_many_account++;
-		return &How_many_account;
+		return How_many_account;
 	}
 
 
