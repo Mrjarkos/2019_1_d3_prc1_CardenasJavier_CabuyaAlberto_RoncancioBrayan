@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 	Bank* banco2= new Bank(Name2, NULL, NULL);
 	do{
 		std::cout<<"Digite 1 para probar banco1\nDigite 2 para probar banco2"<<endl;
-		optionkey= cin.get();
+		cin>>optionkey;
 		if(optionkey=='1'){
 			std::cout<<"Bienvenido al banco 1, ¿que desea hacer?, escoja una de las opciones mostradas\n"<<endl;
 			std::cout << "Consultar:\n Nombre del banco: n\n"<<endl;
@@ -284,8 +284,21 @@ int main(int argc, char **argv)
 					std::cout << "Ingrese su contraseña" << endl;
 					cin >> contra;
 					int money = 0;
+					int salir=0;
+					do{
+						try{
 					std::cout << "Ingrese el dinero a transferir" << endl;
 					cin >> money;
+					if(!cin)
+						throw 125;
+					salir=1;
+					}catch(int){
+						std::cout<<"\nCantidad no valida"<<std::endl;
+						cin.clear();
+						cin.ignore();
+
+					}
+				}while(salir==0);
 					std::cout<< "\nInserte el numero de cuenta a donde va a transferir"<<endl;
 					char* accnum2= new char[20];
 					cin >> accnum2;
@@ -311,18 +324,26 @@ int main(int argc, char **argv)
 					char* getstatus = new char[2];
 					cin >> getstatus;
 					bool status;
-					if(*getstatus=='1'){
-						status= true;
+					switch (*getstatus)
+					{
+					case '1':
+						status = true;
+						break;
+					case '2':
+						status = false;
+						break;
+					default:
+
+						break;
 					}
-					else{
-						status= false;
-					}
-					
+					if (status != NULL) {
 						bool askopstate = banco1->block_unblock_account(id_cuenta, contra, !status);
 						if (askopstate) std::cout << "\nProceso realizado correctamente" << endl;
 						else std::cout << "\nProceso no completado satisfactoriamente" << endl;
-			
-					
+					}
+					else {
+						std::cout << "\nSeleccione una operacion valida" << endl;
+					}
 
 				}
 					break;
@@ -332,10 +353,9 @@ int main(int argc, char **argv)
 					char* id_cuenta = new char[20];
 					std::cout << "Ingrese numero de la cuenta" << endl;
 					cin >> id_cuenta;
-					int money = 0;
-					std::cout << "Ingrese el dinero a consignar" << endl;
-					cin >>money;
-
+					int money = ask_deposit_money();
+					
+					
 					bool status = false;
 					if (banco1->get_how_accounts()!=0) {
 						status = banco1->deposit(id_cuenta, money);
@@ -354,8 +374,20 @@ int main(int argc, char **argv)
 					std::cout << "Ingrese su contraseña" << endl;
 					cin >> contra;
 					int money = 0;
-					std::cout << "Ingrese el dinero a retirar" << endl;
-					cin >> money;
+					int salir=0;
+					do{
+					try{
+						std::cout << "Ingrese el dinero a retirar" << endl;
+						cin >> money;
+						if(!cin)
+							throw 125;
+						salir=1;
+					}catch(int){
+							std::cout << "Cantidad no valida" << endl;
+							cin.clear();
+							cin.ignore();
+						}
+					}while(salir==0);
 					int saldo = -1;
 					if (banco1->get_how_accounts() != 0 && banco1->id_account_exist(id_cuenta)) {
 						saldo = banco1->withdrawal(id_cuenta, money, contra);
@@ -643,9 +675,22 @@ int main(int argc, char **argv)
 					char* contra = new char[10];
 					std::cout << "Ingrese su contraseña" << endl;
 					cin >> contra;
-					int money = 0;
+					int money=0;
+					int salir=0;
+					do{
+						try{
 					std::cout << "Ingrese el dinero a transferir" << endl;
 					cin >> money;
+					if(!cin)
+						throw 125;
+					salir=1;
+					}catch(int){
+						std::cout<<"\nCantidad no valida"<<std::endl;
+						cin.clear();
+						cin.ignore();
+
+					}
+				}while(salir==0);
 					std::cout<< "\nInserte el numero de cuenta a donde va a transferir"<<endl;
 					char* accnum2= new char[20];
 					cin >> accnum2;
@@ -671,17 +716,26 @@ int main(int argc, char **argv)
 					char* getstatus = new char[2];
 					cin >> getstatus;
 					bool status;
-					if(*getstatus=='1'){
-						status= true;
+					switch (*getstatus)
+					{
+					case '1':
+						status = true;
+						break;
+					case '2':
+						status = false;
+						break;
+					default:
+
+						break;
 					}
-					else{
-						status= false;
-					}
-					
-						bool askopstate = banco1->block_unblock_account(id_cuenta, contra, !status);
+					if (status != NULL) {
+						bool askopstate = banco2->block_unblock_account(id_cuenta, contra, !status);
 						if (askopstate) std::cout << "\nProceso realizado correctamente" << endl;
 						else std::cout << "\nProceso no completado satisfactoriamente" << endl;
-			
+					}
+					else {
+						std::cout << "\nSeleccione una operacion valida" << endl;
+					}
 
 				}
 					break;
@@ -691,9 +745,7 @@ int main(int argc, char **argv)
 					char* id_cuenta = new char[20];
 					std::cout << "Ingrese numero de la cuenta" << endl;
 					cin >> id_cuenta;
-					int money = 0;
-					std::cout << "Ingrese el dinero a consignar" << endl;
-					cin >>money;
+					int money = ask_deposit_money();
 
 					bool status = false;
 					if (banco2->get_how_accounts()!=0) {
@@ -713,8 +765,20 @@ int main(int argc, char **argv)
 					std::cout << "Ingrese su contraseña" << endl;
 					cin >> contra;
 					int money = 0;
-					std::cout << "Ingrese el dinero a retirar" << endl;
-					cin >> money;
+					int salir=0;
+					do{
+					try{
+						std::cout << "Ingrese el dinero a retirar" << endl;
+						cin >> money;
+						if(!cin)
+							throw 125;
+						salir=1;
+					}catch(int){
+							std::cout << "Cantidad no valida" << endl;
+							cin.clear();
+							cin.ignore();
+						}
+					}while(salir==0);
 					int saldo = -1;
 					if (banco2->get_how_accounts() != 0 && banco2->id_account_exist(id_cuenta)) {
 						saldo = banco2->withdrawal(id_cuenta, money, contra);
@@ -741,8 +805,8 @@ int main(int argc, char **argv)
 		
 		
 
-		std::cout << "Presione dos veces Esc  y enter para salir o cualquier tecla volver al inicio" << endl;
-		exitkey=cin.get();
+		std::cout << "Presione dos veces Esc para salir o cualquier tecla volver al inicio" << endl;
+		exitkey=getch();
 
 	}while(exitkey!=27);
 
@@ -762,10 +826,26 @@ char* ask_key(){
 }
 
 int ask_deposit_money(){
-	std::cout<<"\nDigite la cantidad de dinero a depositar"<<endl;
-	int money;
-	cin>> money;
-	return money;
+	
+	int money=0;
+	do{
+		try{
+			std::cout<<"\nDigite la cantidad de dinero a depositar"<<endl;		
+			cin>> money;
+			 if(!cin)
+            throw 127;
+			return money;
+		}catch(int ){
+			std::cout<<"\nCantidad no valida"<<std::endl;
+			cin.clear();
+			cin.ignore();
+			money=0;
+		}
+	}while(1);
+
+	
+		
+	
 }
 bool ask_status(){
 	std::cout<<"\nPresione 1 para activar la cuenta y 2 para bloquear"<<endl;
@@ -812,10 +892,22 @@ char* ask_lastname(){
 	return lastname;
 }
 int ask_age(){
-	std::cout<<"\nInsete su edad"<<endl;
-	int age;
-	cin>> age;
-	return age;
+	do{
+		try{
+		std::cout<<"\nInsete su edad"<<endl;
+		int age;
+		cin>> age;
+			if(!cin)
+            throw 127;
+			return age;
+		}catch(int ){
+			std::cout<<"\nCantidad no valida"<<std::endl;
+			cin.clear();
+			cin.ignore();
+		
+		}
+	}while(1);
+	
 }
 char* ask_id(){
 	std::cout<<"\nInserte id de la cuenta "<<endl;
