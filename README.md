@@ -111,5 +111,98 @@ procesos lógicos para comprovar los valores de identificación de cliente, cuen
 contraseña de cada cliente, y la cantidad de clientes y cuentas que posee el banco, 
 con el propocito de generar identificaciones de cuentas, esto con el fin de evitar cruce de datos.
 Las funciones resumidas se pueden observar en el Bank.h. 
+	
+	#ifndef BANK_H
+	#define BANK_H
+
+	#include "BankAccount.h"
+	#include "BankClient.h"
+	#include <iostream>
+	#include <string>
+	#include <sstream>
+
+	struct Account_information{
+	char* id_account;
+	bool state;
+	int balance;
+	BankClient* cliente;
+	Account_information() {
+		id_account = 0;
+		state = 0;
+		balance = 0;
+	}
+	};
+
+	struct Client_information{
+	char* firstName;
+	char* lastName;
+	char* id_client;
+	char** accounts;
+	int nAccount;
+
+	Client_information() {
+		firstName = 0;
+		lastName = 0;
+		id_client = 0;
+	}
+	};
+
+	class Bank
+	{
+	char* name;
+	BankClient** list_clients;
+	BankAccount** list_accounts;
+	int How_many_client; 
+	int How_many_account;
+	int next_account;
+	int initial_accounts;
+	int initial_clients; 
+
+	public:
+	Bank(char*, BankClient**, BankAccount**);
+	~Bank();
+
+	char* get_name();
+
+	bool create_client(char*, char*, char*, int, char**); 
+
+	bool create_client(char*, char*, char*, int, char*, char*, int);
+
+	bool update_client(BankClient*, char*, char*, char*, int);
+
+	Client_information* consult_client(char* id_client);
+
+	bool create_account(char*, char*, BankClient*, int);
+
+	Account_information* consult_account(char*, char*);
+
+	bool block_unblock_account(char*, char*, bool);
+
+	bool deposit(char*, int);
+
+	int withdrawal(char*, int, char*);
+
+	bool transfer_money(char*, char*, char*, Bank* banco, int);	
+
+	bool id_account_exist(char*);
+
+	bool id_client_exist(char*);
+	
+	BankAccount* select_count(char*);
+
+	BankClient* select_client(char*);
+	
+	BankClient* select_client_lastName(char*);
+
+	int get_how_accounts();
+
+	void fail_account();
+
+	int LongitudCadena(char*);
+	};
+	
+	#endif
+
+Como se puede observar en el Bank.h, en esta clase se realiza por decir el proceso pesado del Banco, pues en este código se lleva a cabo la selección de cuenta, el conteo de número de cuentas por cliente, la selección de cliete, consulta de cuenta, etc... En cuestión, esta clase se podria tomar como el eje central del funcionamiento del banco, pues es la que se encarga de enlazar los procesos de las clases BankAccount y BankClient.  
 
 
