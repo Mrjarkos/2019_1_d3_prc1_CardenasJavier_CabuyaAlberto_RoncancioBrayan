@@ -35,6 +35,8 @@ public:
 
 	char* get_id();
 
+	int get_age();
+
 	char** get_accounts();
 
 	int nAccounts();

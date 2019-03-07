@@ -24,7 +24,7 @@ struct Client_information{
 	char* firstName;
 	char* lastName;
 	char* id_client;
-	BankAccount** accounts;
+	char** accounts;
 	int nAccount;
 
 	Client_information() {
@@ -84,6 +84,8 @@ public:
 	int get_how_accounts();
 
 	void fail_account();
+
+	int LongitudCadena(char*);
 };
 	
 #endif

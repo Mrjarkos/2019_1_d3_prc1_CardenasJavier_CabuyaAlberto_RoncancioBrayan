@@ -4,7 +4,8 @@
 
 	Bank::Bank(char* name, BankClient** list_clients, BankAccount** list_accounts){
 		int n = 20;
-		initial_accounts = n;
+		int m;
+		initial_accounts = n*10;
 		initial_clients = n;
 
 		this->name = name;
@@ -25,7 +26,8 @@
 		}
 		else{
 			How_many_client = 0;
-			this->list_clients = new BankClient*[initial_accounts];	
+			this->list_clients = new BankClient*[initial_accounts];
+			m = sizeof(list_clients) / sizeof(*list_clients);
 			}
 	};
 
@@ -50,8 +52,8 @@
 			initial_clients+=20;
 			BankClient** list_clients_aux = list_clients;
 			delete list_clients;
-			list_clients = new BankClient*[initial_clients];
-			list_clients = list_clients_aux;
+			this->list_clients = new BankClient*[initial_clients];
+			this->list_clients = list_clients_aux;
 			delete list_clients_aux;
 		} 
 
@@ -59,7 +61,7 @@
 			cliente->Add_account(accounts[i]);
 		} 
 
-		list_clients[How_many_client] = cliente;
+		this->list_clients[How_many_client] = cliente;
 		return true;
 	}
 
@@ -78,8 +80,8 @@
 			initial_clients+=20;
 			BankClient** list_clients_aux = list_clients;
 			delete list_clients;
-			list_clients = new BankClient*[initial_clients];
-			list_clients = list_clients_aux;
+			this->list_clients = new BankClient*[initial_clients];
+			this->list_clients = list_clients_aux;
 			delete list_clients_aux;
 					
 		} 
@@ -87,15 +89,20 @@
 		 if(!a){
 		 	return false;
 		 }
-		cliente->Add_account(list_accounts[How_many_account-1]->accountnumber);//problemas
+
+		//problemas
 		
-		list_clients[How_many_client] = cliente;
-		How_many_client++;
+		this->list_clients[How_many_client] = cliente;
+		this->How_many_client++;
 		return true;
 	}
 
 	bool Bank::update_client(BankClient* cliente, char* firstName, char* lastName, char* id, int age){
 		cliente->Update_data(firstName, lastName, id, age, cliente->get_accounts());
+		for (int i = 0; i < cliente->nAccounts(); i++) {
+			BankAccount* cuenta = select_count(cliente->get_accounts()[i]);
+			cuenta->ChangeClient(id);
+		}
 		return true;
 	}
 
@@ -111,16 +118,7 @@
 					client->lastName = cliente->get_lastName();
 					client->id_client = cliente->get_id();
 					client->nAccount = cliente->nAccounts();
-					char** cuentas = cliente->get_accounts();
-
-					list_cuentas = new BankAccount*[sizeof(cuentas)/sizeof(*cuentas)];
-
-					for(int i=0; i<sizeof(cuentas)/sizeof(*cuentas);i++){
-						list_cuentas[i] = select_count(cuentas[i]);
-					}
-
-					client->accounts = list_cuentas;
-
+					client->accounts = cliente->get_accounts();
 					return client;
 				
 			}
@@ -141,13 +139,15 @@
 			initial_accounts+=20;
 			BankAccount** list_accounts_aux = list_accounts;
 			delete list_accounts;
-			list_accounts = new BankAccount*[initial_accounts];
-			list_accounts = list_accounts_aux;
+			this->list_accounts = new BankAccount*[initial_accounts];
+			this->list_accounts = list_accounts_aux;
 			delete list_accounts_aux;
 		} 
 
-		list_accounts[How_many_account] = account; 
-		How_many_account++;
+		list_accounts[How_many_account] = account;
+		cliente->Add_account(account->accountnumber);
+
+		this->How_many_account++;
 		return true;
 
 	}
@@ -178,9 +178,11 @@
 			if(account->CheckKey(key)){
 				if(block){
 					account->Block();
+					std::cout << "Cuenta Bloqueada" << std::endl;
 				}
 				else{
 					account->UnBlock();
+					std::cout << "Cuenta Desbloqueada" << std::endl;
 				}	
 				return true;
 			}
@@ -205,8 +207,9 @@
 		cuenta = select_count(id_account);
 		if(cuenta != NULL){
 			if(cuenta->CheckKey(key)){
-				cuenta->Retirar(amount);
-				return cuenta->ConsultBalance();
+				if (cuenta->Retirar(amount)) {
+					return cuenta->ConsultBalance();
+				}
 			}
 		}
 		return -1;
@@ -233,58 +236,75 @@
 	}	
 
 	bool Bank::id_account_exist(char* id_account){
-		for(int i=0; i<How_many_account; i++){
+		int n = LongitudCadena(id_account);
+		int q;
+		for (int i = 0; i < How_many_client; i++) {
+			q = 0;
 			char* a = list_accounts[i]->accountnumber;
-			if((*id_account) == (*a)){
-				return true;
+			int this_n = LongitudCadena(a);
+
+			if (n == this_n) {
+				for (int j = 0; j < n; ++j)
+				{
+					if (a[j] == id_account[j]) {
+						q++;
+					}
+				}
+				if (q == n) {
+					return true;
+				}
 			}
 		}
-	return false;
+		return false;
 	}
+	
 
 
 	bool Bank::id_client_exist(char* id_client){
-
+		int n = LongitudCadena(id_client);
+		int q;
 		for(int i=0; i<How_many_client; i++){
-			
+			q = 0;
 			char* a = list_clients[i]->get_id();
-				int this_n = sizeof(a)/sizeof(*a);
-				std::cout << "n" << this_n << std::endl;
+				int this_n = LongitudCadena(a);
 
-				int n = sizeof(id_client)/sizeof(*id_client);
-				std::cout << "n" << n << std::endl;
 				if (n==this_n){
-					for (int i = 0; i < n; ++i)
+					for (int j = 0; j < n; ++j)
 					{	
-						std::cout << "a[i] "<< a[i] << std::endl;
-						std::cout << "id_client[i] " << id_client[i] << std::endl;
-						if(a[i]!=id_client[i]){
-							return false;
+						if(a[j]==id_client[j]){
+							q++;
 						}
 					}
-					return true;
+					if (q == n) {
+						return true;
+					}
 			}
 		}
 	return false;
 	}
 
 	BankAccount* Bank::select_count(char* id_account){
-		if(id_account_exist(id_account)){
-			for(int i=0; i<How_many_account; i++){
+		if (id_account_exist(id_account)) {
+			int n = LongitudCadena(id_account);
+			int q;
+			for (int i = 0; i < How_many_client; i++) {
+				q = 0;
 				char* a = list_accounts[i]->accountnumber;
-				int this_n = sizeof(a)/sizeof(*a);
-				int n = sizeof(id_account)/sizeof(*id_account);
-				if (n==this_n){
-					for (int i = 0; i < n; ++i)
-					{	
-						if(a[i]!=id_account[i]){
-							return NULL;
+				int this_n = LongitudCadena(a);
+
+				if (n == this_n) {
+					for (int j = 0; j < n; ++j)
+					{
+						if (a[j] == id_account[j]) {
+							q++;
 						}
 					}
-					return list_accounts[i];
+					if (q == n) {
+						return list_accounts[i];
+					}
 				}
-				
 			}
+			return NULL;
 		}
 		else{
 			return NULL;
@@ -292,24 +312,29 @@
 	}	
 
 	BankClient* Bank::select_client(char* id_client){
+		if (id_client_exist(id_client)) {
+			int n = LongitudCadena(id_client);
+			int q;
+			for (int i = 0; i < How_many_client; i++) {
+				q = 0;
+				char* a = list_clients[i]->id_client;
+				int this_n = LongitudCadena(a);
 
-		if(id_client_exist(id_client)){
-			for(int i=0; i<How_many_client; i++){
-				char* a = list_clients[i]->get_id();
-				int this_n = sizeof(a)/sizeof(*a);
-				int n = sizeof(id_client)/sizeof(*id_client);
-				if (n==this_n){
-					for (int i = 0; i < n; ++i)
-					{	
-						if(a[i]!=id_client[i]){
-							return NULL;
+				if (n == this_n) {
+					for (int j = 0; j < n; ++j)
+					{
+						if (a[j] == id_client[j]) {
+							q++;
 						}
 					}
-					return list_clients[i];
+					if (q == n) {
+						return list_clients[i];
+					}
 				}
 			}
+			return NULL;
 		}
-		else{
+		else {
 			return NULL;
 		}
 	}
@@ -326,9 +351,7 @@
 				}
 			}
 		}
-		else{
-			return NULL;
-		}
+		return NULL;
 	}
 
 	int Bank::get_how_accounts(){
@@ -339,4 +362,12 @@
 
 	void  Bank::fail_account() {
 		//How_many_account--;
+	}
+
+	int Bank::LongitudCadena(char *a) {
+		char *p, *q;
+		p = a;
+		q = a;
+		while (*q) q++;
+		return q - p;
 	}

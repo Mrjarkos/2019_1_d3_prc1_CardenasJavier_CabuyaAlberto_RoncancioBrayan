@@ -10,6 +10,14 @@
 		this->id_client = id_client;
 	} 
 
+	int LCadena(char *a) {
+		char *p, *q;
+		p = a;
+		q = a;
+		while (*q) q++;
+		return q - p;
+	}
+
 	void BankAccount::Block(){
 		accState = false;
 	}
@@ -19,12 +27,22 @@
 	}
 
 	bool BankAccount::CheckKey(char* key){
-		if(this->key == key){
-			return true;
-		}
-		else{
+		
+		int n = LCadena(key);
+		int	q = 0;
+		int this_n = LCadena(this->key);
+			if (n == this_n) {
+				for (int j = 0; j < n; ++j)
+				{
+					if (key[j] == this->key[j]) {
+						q++;
+					}
+				}
+				if (q == n) {
+					return true;
+				}
+			}
 			return false;
-		}
 	}
 
 	void BankAccount::deposit(int amount){
