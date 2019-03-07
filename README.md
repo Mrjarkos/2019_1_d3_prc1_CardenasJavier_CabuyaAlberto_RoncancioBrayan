@@ -205,4 +205,38 @@ Las funciones resumidas se pueden observar en el Bank.h.
 
 Como se puede observar en el Bank.h, en esta clase se realiza por decir el proceso pesado del Banco, pues en este código se lleva a cabo la selección de cuenta, el conteo de número de cuentas por cliente, la selección de cliete, consulta de cuenta, etc... En cuestión, esta clase se podria tomar como el eje central del funcionamiento del banco, pues es la que se encarga de enlazar los procesos de las clases BankAccount y BankClient.  
 
+## main
+En la funcion main, se tiene la parte gráfica del programa, además, que es el archivo, que une todas las clases descritas anteriormente, y en si es en donde se hace toda la comunicación con el usuario, a con tinuación se mostraran las funciones y variables que se usaron para este programa:
 
+
+	#ifndef MAIN_H
+	#define MAIN_H
+
+	#include "Bank.h"
+	#include <curses.h>	
+	#include <iostream>
+	#include <sstream>
+	#include <cstring>
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <string.h>
+
+
+	using namespace std;
+
+	char exitkey;
+	char optionkey;
+	char* key ;
+	char* accnum;
+	int main (int, char**);	
+	char* ask_name();
+	char* ask_lastname();
+	int ask_age();
+	char* ask_id();
+	char* ask_id_client();
+	void ask_consulsaldo(int);
+	bool ask_status();
+	int ask_deposit_money();
+	char* ask_key();
+	char* ask_accountnum();
+	#endif
