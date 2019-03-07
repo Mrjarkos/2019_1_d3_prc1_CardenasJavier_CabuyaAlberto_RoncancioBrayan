@@ -193,18 +193,30 @@
 	bool Bank::deposit(char* id_account, int amount){
 		BankAccount* cuenta;
 		cuenta = select_count(id_account);
-
+		bool state_ac=cuenta-> ConsultState(); 
+		if(!state_ac){
+			std::cout << "Cuenta bloqueada" << std::endl;
+			return false;
+		}
+		else{
 		if(cuenta != NULL){
 			cuenta->deposit(amount);
 			return true;
 			
 		}
+	}
 		return false;	
 	}
 
 	int Bank::withdrawal(char* id_account, int amount, char* key){
 		BankAccount* cuenta;
 		cuenta = select_count(id_account);
+		bool state_ac=cuenta-> ConsultState(); 
+		if(!state_ac){
+			std::cout << "Cuenta bloqueada" << std::endl;
+			return -1;
+		}
+		else{
 		if(cuenta != NULL){
 			if(cuenta->CheckKey(key)){
 				if (cuenta->Retirar(amount)) {
@@ -212,6 +224,7 @@
 				}
 			}
 		}
+	}
 		return -1;
 
 	}
@@ -221,6 +234,12 @@
 		BankAccount* cuenta2;
 		cuenta1 = select_count(id_account1);
 		cuenta2 = banco->select_count(id_account2);
+		bool state_ac=cuenta1-> ConsultState(); 
+		bool state_ac2=cuenta2-> ConsultState(); 	
+		if(!state_ac|| !state_ac2){
+			std::cout << "Cuenta bloqueada" << std::endl;
+			return false;
+		}
 			if(cuenta1 == NULL || cuenta2 == NULL){
 				return false;
 			}
