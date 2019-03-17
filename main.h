@@ -2,31 +2,12 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+
 #include "Bank.h"
-#include <curses.h>
-#include <iostream>
-#include <sstream>
-#include <cstring>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "Interface.h"
 
-
-using namespace std;
 
 char exitkey;
-char optionkey;
-char* key ;
-char* accnum;
-int main (int, char**);
-char* ask_name();
-char* ask_lastname();
-int ask_age();
-char* ask_id();
-char* ask_id_client();
-void ask_consulsaldo(int);
-bool ask_status();
-int ask_deposit_money();
-char* ask_key();
-char* ask_accountnum();
+int main (int, char **);
+
 #endif
