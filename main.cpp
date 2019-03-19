@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 	char * name= argv[1];// Nombre memoria compartida
 	int memory_exists;
 	void*  memorypont;
-	memory_exists= shm_open(name, O_RDWR|O_CREAT , 0666 ); // abre la memoria si existe, revisar el numero
+	memory_exists= shm_open(name,O_CREAT , 0666 ); // abre la memoria si existe, revisar el numero
 	if (memory_exists==-1){
 		printf("La memoria no se logró crear\n");
 	}
