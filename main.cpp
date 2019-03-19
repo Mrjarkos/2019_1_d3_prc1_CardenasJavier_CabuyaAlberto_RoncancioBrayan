@@ -27,9 +27,14 @@ int main(int argc, char **argv)
 	char * name= argv[1];// Nombre memoria compartida
 	int memory_exists;
 	void*  memorypont;
-	memory_exists= shm_open(name,O_CREAT , 0666 ); // abre la memoria si existe, revisar el numero
+	try{
+		memory_exists= shm_open(name, O_RDWR|O_CREAT |O_EXCL , 0666 ); // abre la memoria si existe, revisar el numero
+	}catch(void *){
+		cout<<"El banco ya existe"<<endl;
+	}
 	if (memory_exists==-1){
-		printf("La memoria no se logró crear\n");
+		printf("Banco ya existe \n");
+		return -1;
 	}
 	cout<< memory_exists<<endl;
 	ftruncate(memory_exists, size);
@@ -57,8 +62,8 @@ int main(int argc, char **argv)
 	 	printf("La memoria no existe\n");
 	 	return 0;
 	 }
-	 memorypont= mmap(0, size, PROT_READ, MAP_SHARED, memory_exists, 0);
-	 printf("%s\n kks",(char *)memorypont);
+	// memorypont= mmap(0, size, PROT_READ, MAP_SHARED, memory_exists, 0);
+	//printf("%s\n kks",(char *)memorypont);
 	 shm_unlink(name);
 
 	return 0;
