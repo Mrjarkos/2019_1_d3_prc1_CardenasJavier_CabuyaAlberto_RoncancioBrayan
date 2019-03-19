@@ -390,3 +390,4 @@
 		while (*q) q++;
 		return q - p;
 	}
+	

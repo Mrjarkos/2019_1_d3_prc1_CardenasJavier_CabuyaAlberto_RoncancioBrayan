@@ -7,6 +7,10 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <sys/mman.h>
+#include <sys/stat.h>        
+#include <fcntl.h>  
+#include <unistd.h>
 
 struct Account_information{
 	char* id_account;
@@ -33,7 +37,11 @@ struct Client_information{
 		id_client = 0;
 	}
 };
-
+/*struct Transfer_info
+{
+	int nAccount;
+	char* originBank;
+};*/
 class Bank
 {
 	char* name;
@@ -86,6 +94,7 @@ public:
 	void fail_account();
 
 	int LongitudCadena(char*);
+	
 };
 	
 #endif

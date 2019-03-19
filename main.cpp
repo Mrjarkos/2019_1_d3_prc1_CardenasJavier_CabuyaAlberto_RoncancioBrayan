@@ -7,10 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/mman.h>
-#include <sys/stat.h>        
-#include <fcntl.h>  
-#include <unistd.h>
+
 #define TRUE 1
 #define FALSE 0
 using namespace std;
@@ -27,16 +24,17 @@ int main(int argc, char **argv)
 	char * name= argv[1];// Nombre memoria compartida
 	int memory_exists;
 	void*  memorypont;
-	try{
+	cout<< argv[1]<<endl;
+//	try{
 		memory_exists= shm_open(name, O_RDWR|O_CREAT |O_EXCL , 0666 ); // abre la memoria si existe, revisar el numero
-	}catch(void *){
-		cout<<"El banco ya existe"<<endl;
-	}
+//	}catch(void *){
+//		cout<<"El banco ya existe"<<endl;
+//	}
 	if (memory_exists==-1){
 		printf("Banco ya existe \n");
 		return -1;
 	}
-	cout<< memory_exists<<endl;
+	//cout<< memory_exists<<endl;
 	ftruncate(memory_exists, size);
 	memorypont= mmap(0, size, PROT_WRITE, MAP_SHARED, memory_exists, 0);
 	printf("%s\n",(char *)memorypont);
@@ -44,7 +42,7 @@ int main(int argc, char **argv)
 
 	Bank* banco1= new Bank(argv[1], NULL, NULL); // nombre del banco igual al argumento	
 	Interface* interface1= new Interface(banco1);
-	cout << sizeof(banco1)<<endl;
+	//cout << sizeof(banco1)<<endl;
 	do{
 
 		interface1-> mostrar();

@@ -12,6 +12,7 @@
 			int ask_age();
 			char* ask_id();
 			char* ask_id_client();
+			int TransferinterBank(int , char *, char *);
 			class Interface{
 
 				public:

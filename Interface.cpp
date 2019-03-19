@@ -20,7 +20,7 @@
 					std::cout << "Consultar:\n Nombre del banco: n\n"<<std::endl;
 					std::cout << "Cliente : p \n Cuenta : c \n Crear cliente : m \n"<<std::endl;
 					std::cout << "Actualizar datos cliente: u\n Crear cuenta: a\n Transferir : t\n"<<std::endl;
-					std::cout << "Cambiar estado cuenta: e\n Depositar: d\n Retirar dinero: r \n"<<std::endl;
+					std::cout << "Cambiar estado cuenta: e\n Depositar: d\n Retirar dinero: r \n Transferir a otro banco: k"<<std::endl;
 					std::cin>>optionkey ;
 					char* id_client = new char [20];
 					switch(optionkey){
@@ -28,7 +28,16 @@
 						case 'N':
 						case 'n':std::cout<< "Nombre del banco=" << banco1-> get_name()<<"\n"<< endl;
 					break;
-
+						case 'K':
+						case 'k':{
+								int money = ask_deposit_money();
+								char * namebank2= new char[100];
+								namebank2= ask_name();
+								char * id_account= new char[100];
+								id_account=ask_id();
+								int err= TransferinterBank(money, namebank2, id_account); 
+							}
+						break;
 						case 'P':
 						case  'p':{ 
 							std::cout<< "Inserte numero de identificacion del cliente" << std::endl;
@@ -407,6 +416,38 @@
 
 					}	
 		}
+		int  TransferinterBank(int money, char * name,char * cuenta){
+				std::cout<<name<<std::endl
+				int memory_exists;
+				void* memorypoint;
+				std::cout<<name<<std::endl;
+				Bank* banco2= new Bank(name, NULL,NULL);
+				std::cout<<name<<std::endl;
+				memory_exists= shm_open(name, O_RDWR, 0666);
+				printf("exito" );
+				if (memory_exists==-1)
+				{
+					return -1; //-1 error banco no encontrado	
+				}
+				ftruncate(memory_exists, 400);
+				printf("exito" );
+				memorypoint= mmap(0,400, PROT_WRITE, MAP_SHARED, memory_exists,0);
+				printf("exito%s", memorypoint);
+				banco2= (Bank *) memorypoint;
+				bool status;
+				if (banco2->get_how_accounts()!=0)
+				{
+					status=banco2->	deposit(cuenta, money);
+					if(!status){
+						return -3; // error de la cuenta bloqueada o inexistente
+					}
+					else {
+						sprintf((char *)memorypoint, "%s", banco2);
+						return 0;
+					} //exito
+				}
+				else {return -2;} // -2 error cuenta en banco no encontrada
+	}
 		char* ask_accountnum(){
 			std::cout<< "\nInserte su numero de cuenta"<<endl;
 						char* accnum = 0;
