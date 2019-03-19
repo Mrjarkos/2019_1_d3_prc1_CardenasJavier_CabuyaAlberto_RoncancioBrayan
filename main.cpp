@@ -15,8 +15,7 @@
 #define FALSE 0
 using namespace std;
 #pragma warning(disable : 4996) 
-const int size = 8172; //tamaño memoria compartida
-const char * name= "bank";// Nombre memoria compartida
+const int size =400; //tamaño memoria compartida
 int main(int argc, char **argv)
 {	
 	//cout<< argv[1]<<endl;
@@ -25,13 +24,14 @@ int main(int argc, char **argv)
 	//cout<< memory_exists<<endl;
 	//char nombre []= "Cranks bank";
 	//char* Nombre= nombre;
-
+	char * name= argv[1];// Nombre memoria compartida
 	int memory_exists;
 	void*  memorypont;
 	memory_exists= shm_open(name, O_RDWR|O_CREAT , 0666 ); // abre la memoria si existe, revisar el numero
 	if (memory_exists==-1){
 		printf("La memoria no se logró crear\n");
 	}
+	cout<< memory_exists<<endl;
 	ftruncate(memory_exists, size);
 	memorypont= mmap(0, size, PROT_WRITE, MAP_SHARED, memory_exists, 0);
 	printf("%s\n",(char *)memorypont);
@@ -39,13 +39,14 @@ int main(int argc, char **argv)
 
 	Bank* banco1= new Bank(argv[1], NULL, NULL); // nombre del banco igual al argumento	
 	Interface* interface1= new Interface(banco1);
+	cout << sizeof(banco1)<<endl;
 	do{
 
 		interface1-> mostrar();
 		std::cout << "Presione dos veces Esc para salir o cualquier tecla volver al inicio" << endl;
 		
 	memorypont= mmap(0, size, PROT_WRITE, MAP_SHARED, memory_exists,0);
-	sprintf((char *)memorypont, "%s",banco1);
+	sprintf((char *)memorypont, "%s;",banco1);
 	memorypont+=sizeof(banco1);
 	printf("%s\n",(char* )memorypont);
 	cin>>exitkey;
@@ -58,6 +59,7 @@ int main(int argc, char **argv)
 	 }
 	 memorypont= mmap(0, size, PROT_READ, MAP_SHARED, memory_exists, 0);
 	 printf("%s\n kks",(char *)memorypont);
+	 shm_unlink(name);
 
 	return 0;
 }
