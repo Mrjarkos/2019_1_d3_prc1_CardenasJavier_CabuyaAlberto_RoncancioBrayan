@@ -56,7 +56,9 @@ class Bank
 public:
 	Bank(char*, BankClient**, BankAccount**);
 	~Bank();
-
+	void* pointmem;
+	int memoryexist;
+	const int size = 400;
 	char* get_name();
 
 	bool create_client(char*, char*, char*, int, char**); 

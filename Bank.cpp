@@ -1,8 +1,22 @@
 #include "Bank.h"
 #include <string>
+#include <exception>
+using namespace std;
 
-
+class myexception: public exception{
+  virtual const char* what() const throw()
+  {
+    return "Banco ya creado";
+  }
+} CreatedBank;
 	Bank::Bank(char* name, BankClient** list_clients, BankAccount** list_accounts){
+		memoryexist= shm_open(name, O_RDWR|O_CREAT|O_EXCL, 0666);
+		if (memoryexist==-1)
+		{
+			throw CreatedBank;
+		}
+		ftruncate(memoryexist, size);
+		pointmem= mmap(0, size, PROT_WRITE, MAP_SHARED, memoryexist, 0);
 		int n = 20;
 		int m;
 		initial_accounts = n*10;
@@ -389,5 +403,38 @@
 		q = a;
 		while (*q) q++;
 		return q - p;
+	}
+	int Bank::TransferinterBank(int money, char * name,char * cuenta){
+				std::cout<<name<<std::endl;
+				int memory_exists;
+				void* memorypoint;
+				std::cout<<name<<std::endl;
+				Bank* banco2= new Bank(name, NULL,NULL);
+				std::cout<<name<<std::endl;
+				memory_exists= shm_open(name, O_RDWR, 0666);
+				printf("exito" );
+				if (memory_exists==-1)
+				{
+					return -1; //-1 error banco no encontrado	
+				}
+				ftruncate(memory_exists, 400);
+				printf("exito" );
+				memorypoint= mmap(0,400, PROT_WRITE, MAP_SHARED, memory_exists,0);
+				printf("exito%s", memorypoint);
+				banco2= (Bank *) memorypoint;
+				bool status;
+				if (banco2->get_how_accounts()!=0)
+				{
+					status=banco2->	deposit(cuenta, money);
+					if(!status){
+						return -3; // error de la cuenta bloqueada o inexistente
+					}
+					else {
+						memorypoint= banco2;
+						sprintf((char *)memorypoint, "%s", banco2);
+						return 0;
+					} //exito
+				}
+				else {return -2;} // -2 error cuenta en banco no encontrada
 	}
 	

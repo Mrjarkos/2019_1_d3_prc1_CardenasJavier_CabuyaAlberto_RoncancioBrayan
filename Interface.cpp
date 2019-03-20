@@ -30,13 +30,8 @@
 					break;
 						case 'K':
 						case 'k':{
-								int money = ask_deposit_money();
-								char * namebank2= new char[100];
-								namebank2= ask_name();
-								char * id_account= new char[100];
-								id_account=ask_id();
-								int err= TransferinterBank(money, namebank2, id_account); 
-							}
+							
+								}
 						break;
 						case 'P':
 						case  'p':{ 
@@ -339,7 +334,7 @@
 								status = false;
 								break;
 							default:
-
+								status=false;
 								break;
 							}
 							if (status != NULL) {
@@ -416,8 +411,8 @@
 
 					}	
 		}
-		int  TransferinterBank(int money, char * name,char * cuenta){
-				std::cout<<name<<std::endl
+	/*	int  TransferinterBank(int money, char * name,char * cuenta){
+				std::cout<<name<<std::endl;
 				int memory_exists;
 				void* memorypoint;
 				std::cout<<name<<std::endl;
@@ -442,12 +437,13 @@
 						return -3; // error de la cuenta bloqueada o inexistente
 					}
 					else {
+						memorypoint= banco2;
 						sprintf((char *)memorypoint, "%s", banco2);
 						return 0;
 					} //exito
 				}
 				else {return -2;} // -2 error cuenta en banco no encontrada
-	}
+	}*/
 		char* ask_accountnum(){
 			std::cout<< "\nInserte su numero de cuenta"<<endl;
 						char* accnum = 0;
@@ -542,7 +538,7 @@
 		}
 		char* ask_id(){
 			std::cout<<"\nInserte id de la cuenta "<<endl;
-			char* acc_id = 0;
+			char* acc_id = new char[12];
 			cin>> acc_id;
 			return acc_id;
 		}
