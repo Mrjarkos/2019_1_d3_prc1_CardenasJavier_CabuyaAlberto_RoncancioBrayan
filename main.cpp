@@ -4,8 +4,6 @@
 #include <iostream>
 #include <sstream>
 #include <cstring>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
 #include <sys/stat.h>        
@@ -33,16 +31,17 @@ try{
 			do{
 
 				interface1-> mostrar();
-				std::cout << "Presione dos veces Esc para salir o cualquier tecla volver al inicio" << endl;
+				std::cout << "Presione  Esc para salir o cualquier tecla volver al inicio" << endl;
 				
 			
 			cin>>exitkey;
 			}while(exitkey!=27);
+			delete banco1;
 			return 0;
 	} catch (exception& e)
 	  {
 	    cout << e.what() << '\n';
-	    shm_unlink(name);
+	    //shm_unlink(name);
 	    return 0;
 	  }
 }

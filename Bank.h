@@ -11,7 +11,8 @@
 #include <sys/stat.h>        
 #include <fcntl.h>  
 #include <unistd.h>
-
+#include <stdio.h>
+#include <stdlib.h>
 struct Account_information{
 	char* id_account;
 	bool state;
@@ -37,11 +38,19 @@ struct Client_information{
 		id_client = 0;
 	}
 };
-/*struct Transfer_info
+struct Transfer_info
 {
-	int nAccount;
+	char* nAccount;
 	char* originBank;
-};*/
+	int money;
+	int readstate;
+	Transfer_info(){
+		nAccount=NULL;
+		originBank= NULL;
+		money=0;
+		readstate=0;
+	}
+};
 class Bank
 {
 	char* name;
@@ -99,6 +108,9 @@ public:
 
 	int TransferinterBank(int, char *, char *, char *, char *);
 	
+	int readmem(char*);
+	
+	void receivetransfer();	
 };
 	
 #endif

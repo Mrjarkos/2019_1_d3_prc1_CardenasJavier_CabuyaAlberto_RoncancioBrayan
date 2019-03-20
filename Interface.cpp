@@ -20,7 +20,7 @@
 					std::cout << "Consultar:\n Nombre del banco: n\n"<<std::endl;
 					std::cout << "Cliente : p \n Cuenta : c \n Crear cliente : m \n"<<std::endl;
 					std::cout << "Actualizar datos cliente: u\n Crear cuenta: a\n Transferir : t\n"<<std::endl;
-					std::cout << "Cambiar estado cuenta: e\n Depositar: d\n Retirar dinero: r \n Transferir a otro banco: k"<<std::endl;
+					std::cout << "Cambiar estado cuenta: e\n Depositar: d\n Retirar dinero: r \n Transferir a otro banco: k\n Recibir transferencias: i"<<std::endl;
 					std::cin>>optionkey ;
 					char* id_client = new char [20];
 					switch(optionkey){
@@ -28,10 +28,97 @@
 						case 'N':
 						case 'n':std::cout<< "Nombre del banco=" << banco1-> get_name()<<"\n"<< endl;
 					break;
+						case 'I':
+						case 'i':{
+							banco1->receivetransfer();
+							cout<<"Transferencia hecha"<<endl;
+						
+						}
+						break;
 						case 'K':
 						case 'k':{
-							
+							char* id_cuenta = new char[20];
+							std::cout << "Ingrese el numero de su cuenta" << endl;
+							cin >> id_cuenta;
+							char* contra = new char[10];
+							std::cout << "Ingrese su contraseña" << endl;
+							cin >> contra;
+							int money = 0;
+							int salir=0;
+							do{
+									try{
+								std::cout << "Ingrese el dinero a transferir" << endl;
+								cin >> money;
+								if(!cin)
+									throw 125;
+								salir=1;
+								}catch(int){
+									std::cout<<"\nCantidad no valida"<<std::endl;
+									cin.clear();
+									cin.ignore();
+
 								}
+							}while(salir==0);
+							std:cout<<"\nInserte el nombre del banco donde se va a depositar"<<std::endl;
+							char* bankname= new char[20];
+							cin>> bankname;
+							std::cout<< "\nInserte el numero de cuenta a donde va a transferir"<<endl;
+							char* accnum2= new char[20];
+							cin >> accnum2;
+							int transferstate;
+							
+							do{
+							 transferstate = banco1->TransferinterBank(money, bankname, accnum2,id_cuenta ,contra);
+							 //-1 banco no encontrado
+							//-2 cuenta bloqueada
+							// -3 Dinero unsuficiente inexistente
+							//-4 contraseña incorrecta
+							//-5 banco ocupado
+							 if (transferstate==-5)
+							 {
+							 	
+							 	std::cout<<"digite cualquier tecla para intentar de nuevo la acción"<<std::endl;
+							 	
+							 }
+							 else if(transferstate==-1){
+							 	cout << "\nError banco no encontrado" << endl;
+							 	
+							 }
+							 else if(transferstate==-2){
+							 	std::cout << "\nCuenta local bloqueada" << endl;
+							 	
+							 }
+							 else if (transferstate==-3){
+							 	std::cout << "\nNo hay suficiente dinero en la cuenta" << endl;
+							 	
+							 }
+							 else if (transferstate==-4)
+							 {
+							 	std::cout << "\nDatos de cuenta incorrectos" << endl;
+							 	
+							 }
+							//printf("kks" );
+							}while(transferstate==-5);
+							int readstate;
+							do{
+								 
+								 if(transferstate!=0){
+								 	readstate=-1;
+								 }
+								 else readstate = banco1-> readmem(bankname);
+								 //1 banco destino no ha refrescado
+								 //0 transferencia realizada correctamente
+								 //-1 cuenta destino bloqueada
+								 // -2 cuenta destino no encontrada
+							}while(readstate==1);
+							
+							if (transferstate==0&& readstate==0) {
+								std::cout << "\nTransferencia realizada" << endl;
+							}
+							else { std::cout << "\nError en la transferencia" << endl; }
+						
+							
+							}
 						break;
 						case 'P':
 						case  'p':{ 

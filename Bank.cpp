@@ -1,5 +1,5 @@
 #include "Bank.h"
-#include <string>
+#include <string.h>
 #include <exception>
 using namespace std;
 
@@ -9,15 +9,23 @@ class myexception: public exception{
     return "Banco ya creado";
   }
 } CreatedBank;
+
 	Bank::Bank(char* name, BankClient** list_clients, BankAccount** list_accounts){
-		size= 400;
+		size= 4096;
 		memoryexist= shm_open(name, O_RDWR|O_CREAT|O_EXCL, 0666);
+		Transfer_info* memtrnasfer;
 		if (memoryexist==-1)
 		{
 			throw CreatedBank;
 		}
 		ftruncate(memoryexist, size);
 		pointmem= mmap(0, size, PROT_WRITE, MAP_SHARED, memoryexist, 0);
+		memtrnasfer=(Transfer_info *)pointmem;
+		memtrnasfer[0].nAccount=NULL;
+		memtrnasfer[0]. originBank= NULL;
+		memtrnasfer[0].money= 0;
+		memtrnasfer[0].readstate=0;
+		close(memoryexist);
 		int n = 20;
 		int m;
 		initial_accounts = n*10;
@@ -411,17 +419,17 @@ class myexception: public exception{
 				std::cout<<nombre<<std::endl;
 				int memory_exists2;
 				void* memorypoint2;
-				
+				Transfer_info* data; 
 				BankAccount* cuenta1;
 				
 				cuenta1 = select_count(cuentaorig);
-				cout<<"Exito"<<endl;
+				
 				if (cuenta1==NULL)
 				{
 					return -3;
 				}
 				bool state_ac=cuenta1-> ConsultState(); 
-				cout<<"Exito"<<endl;
+				//cout<<"Exito"<<endl;
 				if(!state_ac){
 					std::cout << "Cuenta bloqueada" << std::endl;
 					return -2;//-1 cuenta bloqueada
@@ -429,30 +437,130 @@ class myexception: public exception{
 				else{
 						if(cuenta1->CheckKey(key)){
 							cuenta1->Retirar(money);
-					}
+						}
 					else{
 							return -4;//contraseña incorrecta
 						}
 					}
-				memory_exists2= shm_open(nombre, O_RDWR, 0666);
-				cout<<"Exito"<<endl; 
+				//printf("Exito");
+				memory_exists2= shm_open(nombre, O_RDWR, 0666);//lo hace "bien" 
 				if (memory_exists2==-1)
 				{
 					return -1; //-1 error banco no encontrado	
 				}
-				cout<<"Exito"<<endl;
-				//ftruncate(memory_exists2, 400);
-			
-				memorypoint2= mmap(0, size, PROT_WRITE, MAP_SHARED, memory_exists2, 0);
-				printf("%s\n",(char *)memorypoint2 );
-				// primer item memory pont nobre banco a transferir, segundo cuenta, tercero cantidad de dinero
-				sprintf((char *)memorypoint2, "%s", nombre);
-				sprintf((char *)memorypoint2, "%s", cuenta);
-				sprintf((char*) memorypoint2, "%s", (char *)money);
-				printf("%s\n", (char *)memorypoint2);
-				memorypoint2=mmap(0, size, PROT_WRITE, MAP_SHARED, memory_exists2, 0);
-				printf("%s\n", (char *)memorypoint2);
 				
+				ftruncate(memory_exists2, size);
+				printf("Exito" );
+				memorypoint2= mmap(0, size, PROT_WRITE, MAP_SHARED, memory_exists2, 0);
+				//printf("%s\n", (char *)memorypoint2 );
+				//if (memorypoint2!=NULL){
+				//	return -5; // Banco ocupado con otra transacción
+				//}
+
+				data= (Transfer_info *)memorypoint2;
+				printf("nove");
+				if (data[0].readstate!=0||memorypoint2==NULL){
+					return -5; // Banco ocupado con otra transacción
+				}				
+				//cout<<"Exito"<<endl;
+				// primer item memory pont nobre banco a transferir, segundo cuenta, tercero cantidad de dinero
+				data[0].money= money;
+				//cout<<"Exito"<<endl;
+				data[0].originBank= nombre;				
+				//cout<<"Exito"<<endl;
+				data[0].nAccount= cuenta;
+				//cout<<"Exito"<<endl;
+				data[0].readstate=1;
+				//printf("%s\n", (char *)memorypoint2);
+				//cout<<(char *)memorypoint2<<endl;
+				//int statussave= msync(memorypoint2, size,  MS_SYNC)
+				//close(memory_exists2);
+				//int memory3= shm_open(nombre, O_RONLY, 0666);
+				//void * kks;
+				//kks=mmap(0, size, PROT_READ, MAP_SHARED, memory3, 0);
+				//printf("%s\n", (char *)memorypoint2);
+				//cout<<(char *)kks<<endl;
+				close(memory_exists2);
 				return 0;
 	}
-	
+	int Bank::readmem(char* nombre){
+		int memory3= shm_open(nombre, O_RDWR, 0666);
+		void * pointmem3;
+		Transfer_info* datin;
+		Transfer_info* datout;
+		pointmem3=mmap(0, size, PROT_READ, MAP_SHARED, memory3, 0);
+		datin=(Transfer_info *)pointmem3;
+		pointmem3= mmap(0,size, PROT_WRITE, MAP_SHARED, memory3, 0);
+		datout=(Transfer_info *)pointmem3;
+		if (datin[0].readstate==1)
+		{
+			return 1; //indica que el otro banco no ha refrescado sus transferencias entrantes
+		}
+		else if(datin[0].readstate==0){
+			datout[0].readstate=0;
+			return 0; //se realizo correctamente la transferencia
+		}
+		else if(datin[0].readstate==2){
+			datout[0].readstate=0;
+			return -1; //cuenta destino bloqueada
+		}
+		else if (datin[0].readstate==3){
+			datout[0].readstate=0;
+			return-2;//cuenta destino inexistente
+		}
+	}
+	void Bank::receivetransfer(){
+			void * pointmem2;
+			Transfer_info* datin;
+			Transfer_info* datout;
+			BankAccount* editedacount;
+			printf("Exito\n");
+			int memoryexist2= shm_open(name, O_RDWR, 0666);
+			pointmem2= mmap(0, size, PROT_READ, MAP_SHARED, memoryexist2, 0);
+			datin= (Transfer_info *)pointmem2;
+			printf("Exito\n");
+			printf("%s\n", datout[0].readstate);
+			//void* pointmem3;
+			//int memoryexist3=shm_open(name, O_RDWR,0666);
+			pointmem2= mmap(0,size, PROT_WRITE,MAP_SHARED, memoryexist2, 0);
+			printf("Exito\n");
+			
+			
+			
+		
+				datout=(Transfer_info *)pointmem2;
+				printf("Exito\n");
+				printf("%s",(char *)pointmem2);
+				if(datout[0].readstate!=0){
+					printf("Exito\n");
+					editedacount=select_count(datout[0].nAccount);
+					printf("Exito\n");
+					if (editedacount==NULL){
+						datout[0].readstate= 3;
+						datout[0].nAccount= NULL;
+						datout[0].originBank= NULL;
+						datout[0].money= 0;
+						printf("Exito\n");
+					}
+					else{
+						bool state_ac= editedacount->ConsultState();
+						if (!state_ac){
+							datout[0].readstate= 2;
+							datout[0].nAccount= NULL;
+							datout[0].originBank= NULL;
+							datout[0].money= 0;
+							printf("Exito\n");
+						
+						}
+						else{
+							editedacount->deposit(datout[0].money);
+							datout[0].readstate=0;
+							datout[0].nAccount= NULL;
+							datout[0].originBank= NULL;
+							datout[0].money= 0;
+							printf("Exito\n");
+						}
+					}
+				}
+			
+	}
