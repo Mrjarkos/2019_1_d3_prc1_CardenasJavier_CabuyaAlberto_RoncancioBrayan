@@ -10,6 +10,7 @@ class myexception: public exception{
   }
 } CreatedBank;
 	Bank::Bank(char* name, BankClient** list_clients, BankAccount** list_accounts){
+		size= 400;
 		memoryexist= shm_open(name, O_RDWR|O_CREAT|O_EXCL, 0666);
 		if (memoryexist==-1)
 		{
@@ -407,25 +408,51 @@ class myexception: public exception{
 		return q - p;
 	}
 	int Bank::TransferinterBank(int money, char * nombre,char * cuenta, char * cuentaorig, char * key ){
-				std::cout<<name<<std::endl;
+				std::cout<<nombre<<std::endl;
 				int memory_exists2;
 				void* memorypoint2;
+				
+				BankAccount* cuenta1;
+				
+				cuenta1 = select_count(cuentaorig);
+				cout<<"Exito"<<endl;
+				if (cuenta1==NULL)
+				{
+					return -3;
+				}
+				bool state_ac=cuenta1-> ConsultState(); 
+				cout<<"Exito"<<endl;
+				if(!state_ac){
+					std::cout << "Cuenta bloqueada" << std::endl;
+					return -2;//-1 cuenta bloqueada
+				}
+				else{
+						if(cuenta1->CheckKey(key)){
+							cuenta1->Retirar(money);
+					}
+					else{
+							return -4;//contraseña incorrecta
+						}
+					}
 				memory_exists2= shm_open(nombre, O_RDWR, 0666);
-
+				cout<<"Exito"<<endl; 
 				if (memory_exists2==-1)
 				{
 					return -1; //-1 error banco no encontrado	
 				}
-				ftruncate(memory_exists2, 400);
+				cout<<"Exito"<<endl;
+				//ftruncate(memory_exists2, 400);
 			
-				memorypoint2= mmap(0,400, PROT_WRITE, MAP_SHARED, memory_exists2,0);
+				memorypoint2= mmap(0, size, PROT_WRITE, MAP_SHARED, memory_exists2, 0);
 				printf("%s\n",(char *)memorypoint2 );
 				// primer item memory pont nobre banco a transferir, segundo cuenta, tercero cantidad de dinero
 				sprintf((char *)memorypoint2, "%s", nombre);
 				sprintf((char *)memorypoint2, "%s", cuenta);
 				sprintf((char*) memorypoint2, "%s", (char *)money);
 				printf("%s\n", (char *)memorypoint2);
-
-
+				memorypoint2=mmap(0, size, PROT_WRITE, MAP_SHARED, memory_exists2, 0);
+				printf("%s\n", (char *)memorypoint2);
+				
+				return 0;
 	}
 	
