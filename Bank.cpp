@@ -404,37 +404,23 @@ class myexception: public exception{
 		while (*q) q++;
 		return q - p;
 	}
-	int Bank::TransferinterBank(int money, char * name,char * cuenta){
+	int Bank::TransferinterBank(int money, char * nombre,char * cuenta){
 				std::cout<<name<<std::endl;
-				int memory_exists;
-				void* memorypoint;
-				std::cout<<name<<std::endl;
-				Bank* banco2= new Bank(name, NULL,NULL);
-				std::cout<<name<<std::endl;
-				memory_exists= shm_open(name, O_RDWR, 0666);
-				printf("exito" );
-				if (memory_exists==-1)
+				int memory_exists2;
+				void* memorypoint2;
+				memory_exists2= shm_open(nombre, O_RDWR, 0666);
+
+				if (memory_exists2==-1)
 				{
 					return -1; //-1 error banco no encontrado	
 				}
 				ftruncate(memory_exists, 400);
-				printf("exito" );
-				memorypoint= mmap(0,400, PROT_WRITE, MAP_SHARED, memory_exists,0);
-				printf("exito%s", memorypoint);
-				banco2= (Bank *) memorypoint;
-				bool status;
-				if (banco2->get_how_accounts()!=0)
-				{
-					status=banco2->	deposit(cuenta, money);
-					if(!status){
-						return -3; // error de la cuenta bloqueada o inexistente
-					}
-					else {
-						memorypoint= banco2;
-						sprintf((char *)memorypoint, "%s", banco2);
-						return 0;
-					} //exito
-				}
-				else {return -2;} // -2 error cuenta en banco no encontrada
-	}
+			
+				memorypoint2= mmap(0,400, PROT_WRITE, MAP_SHARED, memory_exists,0);
+				// primer item memory pont nobre banco a transferir, segundo cuenta, tercero cantidad de dinero
+				sprintf((char *)memorypoint2, "%s", nombre);
+				sprintf((char *)memorypoint2, "%s", cuenta);
+				sprintf((char*) memorypoint2, "%s", (char *)money);
+
+			}
 	
