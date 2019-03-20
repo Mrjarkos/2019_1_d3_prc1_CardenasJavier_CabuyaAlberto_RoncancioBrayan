@@ -96,6 +96,8 @@ public:
 	void fail_account();
 
 	int LongitudCadena(char*);
+
+	int TransferinterBank(int, char *, char *, char *, char *);
 	
 };
 	

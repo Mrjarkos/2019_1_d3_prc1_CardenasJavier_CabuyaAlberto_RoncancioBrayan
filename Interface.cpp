@@ -30,8 +30,43 @@
 					break;
 						case 'K':
 						case 'k':{
+							char* id_cuenta = new char[20];
+							std::cout << "Ingrese el numero de su cuenta" << endl;
+							cin >> id_cuenta;
+							char* contra = new char[10];
+							std::cout << "Ingrese su contraseña" << endl;
+							cin >> contra;
+							int money = 0;
+							int salir=0;
+							do{
+								try{
+							std::cout << "Ingrese el dinero a transferir" << endl;
+							cin >> money;
+							if(!cin)
+								throw 125;
+							salir=1;
+							}catch(int){
+								std::cout<<"\nCantidad no valida"<<std::endl;
+								cin.clear();
+								cin.ignore();
+
+							}
+						}while(salir==0);
+							std:cout<<"\nInserte el nombre del banco donde se va a depositar"<<std::endl;
+							char* bankname= new char[20];
+							cin>> bankname;
+							std::cout<< "\nInserte el numero de cuenta a donde va a transferir"<<endl;
+							char* accnum2= new char[20];
+							cin >> accnum2;
+
+							int transferstate = banco1->TransferinterBank(money, bankname, accnum2,id_cuenta ,contra);
+							if (transferstate) {
+								std::cout << "\nTransferencia realizada" << endl;
+							}
+							else { std::cout << "\nError en la transferencia" << endl; }
+						
 							
-								}
+							}
 						break;
 						case 'P':
 						case  'p':{ 

@@ -38,11 +38,12 @@ try{
 			
 			cin>>exitkey;
 			}while(exitkey!=27);
+			delete banco1;
 			return 0;
 	} catch (exception& e)
 	  {
 	    cout << e.what() << '\n';
-	    shm_unlink(name);
+	    //shm_unlink(name);
 	    return 0;
 	  }
 }

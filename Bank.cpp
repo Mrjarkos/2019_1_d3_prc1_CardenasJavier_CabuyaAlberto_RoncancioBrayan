@@ -44,7 +44,9 @@ class myexception: public exception{
 			m = sizeof(list_clients) / sizeof(*list_clients);
 			}
 	};
-
+	Bank::~Bank(){
+		shm_unlink(name);
+	}
 	char* Bank::get_name(){
 		return name;
 	}
@@ -404,7 +406,7 @@ class myexception: public exception{
 		while (*q) q++;
 		return q - p;
 	}
-	int Bank::TransferinterBank(int money, char * nombre,char * cuenta){
+	int Bank::TransferinterBank(int money, char * nombre,char * cuenta, char * cuentaorig, char * key ){
 				std::cout<<name<<std::endl;
 				int memory_exists2;
 				void* memorypoint2;
@@ -414,13 +416,16 @@ class myexception: public exception{
 				{
 					return -1; //-1 error banco no encontrado	
 				}
-				ftruncate(memory_exists, 400);
+				ftruncate(memory_exists2, 400);
 			
-				memorypoint2= mmap(0,400, PROT_WRITE, MAP_SHARED, memory_exists,0);
+				memorypoint2= mmap(0,400, PROT_WRITE, MAP_SHARED, memory_exists2,0);
+				printf("%s\n",(char *)memorypoint2 );
 				// primer item memory pont nobre banco a transferir, segundo cuenta, tercero cantidad de dinero
 				sprintf((char *)memorypoint2, "%s", nombre);
 				sprintf((char *)memorypoint2, "%s", cuenta);
 				sprintf((char*) memorypoint2, "%s", (char *)money);
+				printf("%s\n", (char *)memorypoint2);
 
-			}
+
+	}
 	
