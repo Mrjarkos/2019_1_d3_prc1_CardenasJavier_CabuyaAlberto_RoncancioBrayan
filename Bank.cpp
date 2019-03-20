@@ -1,8 +1,22 @@
 #include "Bank.h"
 #include <string>
+#include <exception>
+using namespace std;
 
-
+class myexception: public exception{
+  virtual const char* what() const throw()
+  {
+    return "Banco ya creado";
+  }
+} CreatedBank;
 	Bank::Bank(char* name, BankClient** list_clients, BankAccount** list_accounts){
+		memoryexist= shm_open(name, O_RDWR|O_CREAT|O_EXCL, 0666);
+		if (memoryexist==-1)
+		{
+			throw CreatedBank;
+		}
+		ftruncate(memoryexist, size);
+		pointmem= mmap(0, size, PROT_WRITE, MAP_SHARED, memoryexist, 0);
 		int n = 20;
 		int m;
 		initial_accounts = n*10;
@@ -390,4 +404,23 @@
 		while (*q) q++;
 		return q - p;
 	}
+	int Bank::TransferinterBank(int money, char * nombre,char * cuenta){
+				std::cout<<name<<std::endl;
+				int memory_exists2;
+				void* memorypoint2;
+				memory_exists2= shm_open(nombre, O_RDWR, 0666);
+
+				if (memory_exists2==-1)
+				{
+					return -1; //-1 error banco no encontrado	
+				}
+				ftruncate(memory_exists, 400);
+			
+				memorypoint2= mmap(0,400, PROT_WRITE, MAP_SHARED, memory_exists,0);
+				// primer item memory pont nobre banco a transferir, segundo cuenta, tercero cantidad de dinero
+				sprintf((char *)memorypoint2, "%s", nombre);
+				sprintf((char *)memorypoint2, "%s", cuenta);
+				sprintf((char*) memorypoint2, "%s", (char *)money);
+
+			}
 	

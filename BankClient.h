@@ -40,6 +40,7 @@ public:
 	char** get_accounts();
 
 	int nAccounts();
+	int TransferinterBank(int , char * ,char * );
 
 };
 
