@@ -58,7 +58,7 @@ public:
 	~Bank();
 	void* pointmem;
 	int memoryexist;
-	const int size = 400;
+	int size;
 	char* get_name();
 
 	bool create_client(char*, char*, char*, int, char**); 
@@ -96,6 +96,8 @@ public:
 	void fail_account();
 
 	int LongitudCadena(char*);
+
+	int TransferinterBank(int, char *, char *, char *, char *);
 	
 };
 	
