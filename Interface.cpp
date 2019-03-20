@@ -58,9 +58,25 @@
 							std::cout<< "\nInserte el numero de cuenta a donde va a transferir"<<endl;
 							char* accnum2= new char[20];
 							cin >> accnum2;
+							int transferstate;
+							do{
+							 transferstate = banco1->TransferinterBank(money, bankname, accnum2,id_cuenta ,contra);
+							 
+							 if (transferstate==-5)
+							 {
+							 	char* chekins= new char[20];
+							 	std::cout<<"digite cualquier tecla para intentar de nuevo la acción"<<std::endl;
+							 	cin>>chekins;
+							 }
+							}while(transferstate!=-5);
 
-							int transferstate = banco1->TransferinterBank(money, bankname, accnum2,id_cuenta ,contra);
-							if (transferstate) {
+							int kks = banco1-> readmem(bankname);
+							//-1 banco no encontrado
+							//-2 cuenta bloqueada
+							// -3 Dinero unsuficiente inexistente
+							//-4 contraseña incorrecta
+							//-5 banco ocupado
+							if (transferstate==0) {
 								std::cout << "\nTransferencia realizada" << endl;
 							}
 							else { std::cout << "\nError en la transferencia" << endl; }
