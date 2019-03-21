@@ -8,10 +8,10 @@
 		how_many_accounts = 0;
 	}
 
-	void BankClient::Update_data(char* firstName, char* lastName, char* id, int age, char** accounts){
-		this->firstName=firstName;
-		this->lastName = lastName;
-		this->age=age;
+	void BankClient::Update_data(char* firstname, char* lastname, char* id, int age, char** accounts){
+		firstName = firstname;
+		lastName = lastname;
+		this->age = age;
 		this->id_client=id;
 		this->id_accounts = accounts;
 	}

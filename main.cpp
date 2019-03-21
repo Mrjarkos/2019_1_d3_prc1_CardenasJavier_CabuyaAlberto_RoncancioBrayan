@@ -31,7 +31,7 @@ try{
 			do{
 
 				interface1-> mostrar();
-				std::cout << "Presione dos veces Esc para salir o cualquier tecla volver al inicio" << endl;
+				std::cout << "Presione  Esc para salir o cualquier tecla volver al inicio" << endl;
 				
 			
 			cin>>exitkey;

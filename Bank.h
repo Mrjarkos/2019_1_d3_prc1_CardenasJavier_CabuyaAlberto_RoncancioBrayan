@@ -43,10 +43,12 @@ struct Transfer_info
 	char* nAccount;
 	char* originBank;
 	int money;
+	int readstate;
 	Transfer_info(){
 		nAccount=NULL;
 		originBank= NULL;
 		money=0;
+		readstate=0;
 	}
 };
 class Bank
@@ -105,8 +107,10 @@ public:
 	int LongitudCadena(char*);
 
 	int TransferinterBank(int, char *, char *, char *, char *);
+	
 	int readmem(char*);
 	
+	void receivetransfer();	
 };
 	
 #endif
