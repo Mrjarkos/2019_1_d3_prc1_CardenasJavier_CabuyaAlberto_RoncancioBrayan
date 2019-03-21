@@ -92,7 +92,7 @@
 							 {
 							 	
 							 	std::cout<<"digite cualquier tecla para intentar de nuevo la acción"<<std::endl;
-							 	
+							 	getchar();
 							 }
 							 else if(transferstate==-1){
 							 	cout << "\nError banco no encontrado" << endl;
@@ -113,23 +113,7 @@
 							 }
 							//printf("kks" );
 							}while(transferstate==-5);
-							int readstate;
-							do{
-								 
-								 if(transferstate!=0){
-								 	readstate=-1;
-								 }
-								 else readstate = banco1-> readmem(bankname);
-								 //1 banco destino no ha refrescado
-								 //0 transferencia realizada correctamente
-								 //-1 cuenta destino bloqueada
-								 // -2 cuenta destino no encontrada
-							}while(readstate==1);
-							
-							if (transferstate==0&& readstate==0) {
-								std::cout << "\nTransferencia realizada" << endl;
-							}
-							else { std::cout << "\nError en la transferencia" << endl; }
+	
 						
 							
 							}
@@ -149,7 +133,7 @@
 								char* a;
 								for (int i = 0; i < cliente->nAccount; i++) {
 									a = cliente->accounts[i];
-									printf("\033[0;36m 		Numero de Cuenta [%i] =  %s",i,a);
+									printf("\033[0;36m 		Numero de Cuenta [%i] =  %s\n",i,a);
 								}
 							}
 						}
@@ -323,10 +307,14 @@
 									BankClient* clientee= banco1->select_client(client_id);
 									int money= ask_deposit_money();
 									key= ask_key();
+									printf("Exito2\n");
 									int a = banco1->get_how_accounts();
+									printf("Exito3\n");
 									char* id_account = new char[10];
+									printf("Exito4\n");
 									sprintf(id_account, "%d\0", a);
-									printf("\033[1;36m 		Numero de cuenta: %s \n",atoi(id_account));
+									printf("Exito5\n");
+									printf("\033[1;36m 		Numero de cuenta: %s\n",id_account);
 									bool createclientstate= banco1->create_account(id_account, key, clientee, money );
 									 if(createclientstate){
 										 printf("\033[1;36m 		Cuenta creada \n");
@@ -421,10 +409,12 @@
 							printf("\033[0;37m 		->Ingrese su contraseña \n");
 							cin >> contra;
 							printf("\033[0;37m 		->Presione 1 para activar la cuenta y 2 o cualquier tecla para bloquear \n");
-							char* getstatus = new char[2];
-							cin >> getstatus;
+							char getstatus;
+							getchar();
+							 getstatus = getchar();
 							bool status;
-							switch (*getstatus)
+							printf("%c\n",getstatus );
+							switch (getstatus)
 							{
 							case '1':
 								status = true;
@@ -433,17 +423,15 @@
 								status = false;
 								break;
 							default:
-
+								status= false;
 								break;
 							}
-							if (status != NULL) {
+							
 								bool askopstate = banco1->block_unblock_account(id_cuenta, contra, !status);
 								if (askopstate) printf("\033[1;36m 		Proceso realizado correctamente \n");
 								else printf("\033[0;31m 		Proceso no completado satisfactoriamente \n");
-							}
-							else {
-								printf("\033[0;31m 		Seleccione una operacion valida \n");
-							}
+							
+							
 
 						}
 							break;
@@ -520,6 +508,7 @@
 			printf("\033[0;37m 		->Inserte la clave de su cuenta \n");
 			char* enteredkey= new char[20];
 			cin>> enteredkey;
+			//printf("Exito" );
 			return enteredkey;
 		}
 
