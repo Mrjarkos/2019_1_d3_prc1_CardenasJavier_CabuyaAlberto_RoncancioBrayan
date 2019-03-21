@@ -457,8 +457,9 @@ char* Bank::get_name(){
 				memorypoint2= mmap(0, size, PROT_READ, MAP_SHARED, memory_exists2, 0);
 				
 				memorypoint2= mmap(0, size, PROT_WRITE, MAP_SHARED, memory_exists2, 0);				
-				char * read= (char *)memorypoint2;
-				sprintf(read, "cuenta = %s\n", cuenta);
+				char * write= (char *)memorypoint2;
+				sprintf(write, "%s;\n", cuenta);
+				sprintf(write, "%d;\n",money);
 				//printf("%s\n", (char *)memorypoint2 );
 				//if (memorypoint2!=NULL){
 				//	return -5; // Banco ocupado con otra transacción
