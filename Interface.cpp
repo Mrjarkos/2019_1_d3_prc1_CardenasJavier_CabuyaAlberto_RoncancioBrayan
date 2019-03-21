@@ -16,17 +16,31 @@
 					char optionkey;
 					char* key ;
 					char* accnum;
-					std::cout<<"Bienvenido al banco , ¿que desea hacer?, escoja una de las opciones mostradas\n"<<endl;
-					std::cout << "Consultar:\n Nombre del banco: n\n"<<std::endl;
-					std::cout << "Cliente : p \n Cuenta : c \n Crear cliente : m \n"<<std::endl;
-					std::cout << "Actualizar datos cliente: u\n Crear cuenta: a\n Transferir : t\n"<<std::endl;
-					std::cout << "Cambiar estado cuenta: e\n Depositar: d\n Retirar dinero: r \n Transferir a otro banco: k\n Recibir transferencias: i"<<std::endl;
+					printf("\033[1;31m\n 							  BIENVENIDO 	");
+					printf("\033[0;37m\n 	¿Qué desea hacer?");
+					printf("\033[0;37m\n 	Escoja una de las opciones mostradas\n");
+					printf("\033[0;31m\n 		->Consultar:\n");
+					printf("\033[0;36m				Nombre del banco 			-> \033[1;32m'n'\n");
+					printf("\033[0;36m 				Cliente          			-> \033[1;32m'p'\n"); 
+					printf("\033[0;36m 				Cuenta           			-> \033[1;32m'c'\n"); 
+					printf("\033[0;31m\n 		->Cliente:\n");
+					printf("\033[0;36m				Crear cliente 				-> \033[1;32m'm'\n");
+					printf("\033[0;36m				Actualizar datos cliente 		-> \033[1;32m'u'\n");
+					printf("\033[0;31m\n 		->Cuenta:\n");
+					printf("\033[0;36m				Crear cuenta 					-> \033[1;32m'a'\n");
+					printf("\033[0;36m				Transferir 					-> \033[1;32m't'\n");
+					printf("\033[0;36m				Cambiar estado cuenta 				-> \033[1;32m'e'\n");
+					printf("\033[0;36m				Depositar 					-> \033[1;32m'd'\n");
+					printf("\033[0;36m				Retirar dinero					-> \033[1;32m'r'\n");
+					printf("\033[0;31m\n 		->Banco:\n");
+					printf("\033[0;36m				Transferir entre bancos 	-> \033[1;32m'k'\n");
+					printf("\033[0;36m				Recibir transferencia 		-> \033[1;32m'i'\n");
 					std::cin>>optionkey ;
 					char* id_client = new char [20];
 					switch(optionkey){
 						
 						case 'N':
-						case 'n':std::cout<< "Nombre del banco=" << banco1-> get_name()<<"\n"<< endl;
+						case 'n':printf("\033[1;36m\n 		*Nombre del banco= %s \n",banco1-> get_name());
 					break;
 						case 'I':
 						case 'i':{
@@ -120,24 +134,22 @@
 							
 							}
 						break;
-						case 'P':
+					case 'P':
 						case  'p':{ 
-							std::cout<< "Inserte numero de identificacion del cliente" << std::endl;
+							printf("\033[1;37m\n 	->Inserte numero de identificacion del cliente\n");
 							id_client = new char [20];
 							std::cin >> id_client;
 							Client_information* cliente = banco1->consult_client(id_client);
-							if(cliente==NULL){ std::cout << "Clientre no encontrado" << std::endl; }
+							if(cliente==NULL){ printf("\033[0;37m 				Clientre no encontrado"); }
 							else {
-								
-								std::cout << "exito" << std::endl;
-								std::cout << "Nombre:" << cliente->firstName << std::endl;
-								std::cout << "Apellido:" << cliente->lastName << std::endl;
-								std::cout << "Id:" << cliente->id_client << std::endl;
-								std::cout << "Cuentas:" << endl;
+								printf("\033[0;36m 		*Nombre: %s \n",cliente->firstName);
+								printf("\033[0;36m 		*Apellido: %s \n",cliente->lastName);
+								printf("\033[0;36m 		*Id: %s \n",cliente->id_client);
+								printf("\033[0;36m 		*Cuentas: \n");
 								char* a;
 								for (int i = 0; i < cliente->nAccount; i++) {
 									a = cliente->accounts[i];
-									std::cout << "Numero de Cuenta [" << i << "] = " << a << std::endl;
+									printf("\033[0;36m 		Numero de Cuenta [%i] =  %s",i,a);
 								}
 							}
 						}
@@ -146,31 +158,32 @@
 						case 'C':
 						case 'c' :{
 							char* id_cuenta = new char[20];
-							std::cout << "Ingrese numero de la cuenta" << std::endl;
+							printf("\033[0;37m 	->Ingrese numero de la cuenta \n");
 							cin >> id_cuenta;
 							char* contra = new char[10];
-							std::cout << "Ingrese su contraseña" << endl;
+							printf("\033[0;37m 	->Ingrese su contraseña \n");
 							cin >> contra;
 							Account_information* cuenta = banco1-> consult_account(id_cuenta, contra);
 							if (cuenta != NULL) {
 								Client_information* cliente = banco1->consult_client(cuenta->cliente->id_client);
-								std::cout << "exito" << endl;
-								std::cout << "'Propietario:" << cliente->firstName << " " << cliente->lastName << endl;
-								std::cout << "Id Cliente:" << cliente->id_client << endl;
-								std::cout << "Id Cuenta:" << cuenta->id_account << endl;
+
+								printf("\033[0;36m 		*Propietario: %s %s \n",cliente->firstName ,cliente->lastName);
+								printf("\033[0;36m 		*Id Cliente: %i \n",(atoi)(cliente->id_client));
+								printf("\033[0;36m 		*Id Cuenta: %i \n",(atoi)(cuenta->id_account));
+								
 								char state[10];
 								if (cuenta->state) {
-									std::cout << "Estado: Activo" << endl;
+									printf("\033[0;36m 		*Estado: Activo\n");
 								}
 								else
 								{
-									std::cout << "Estado: Inactivo" << endl;
+									printf("\033[0;31m 		*Estado: Inactivo\n");
 								}
 								
-								std::cout << "Saldo:" << cuenta->balance << endl;
+								printf("\033[0;36m 		*Saldo: %i $\n",cuenta->balance);
 							}
 							else {
-								std::cout << "No se encontro la cuenta o contraseña incorrecta" << endl;
+								printf("\033[0;31m 		No se encontro la cuenta o contraseña incorrecta \n");
 							}
 
 						}
@@ -178,19 +191,19 @@
 						
 						case 'M':
 						case 'm':{ 
-							std::cout<< "\nInserte nombre del cliente:"<< endl;
+								printf("\033[0;37m 		->Inserte nombre del cliente: \n");
 								char*nameclient= new char[15];
 								cin>> nameclient+0;
 								
-								std::cout<< "\nInserte apellido del cliente:"<< endl;
+								printf("\033[0;37m 		->Inserte apellido del cliente: \n");
 								char*lastnameclient = new char[15];
 								cin>> lastnameclient + 0;
 							
-								std::cout<< "\nInserte numero de identificacion del cliente:"<< endl;
+								printf("\033[0;37m 		->Inserte numero de identificacion del cliente: \n");
 								char* id = new char[20];
 								cin>> id + 0;
 							
-								std::cout<< "\nInserte edad del cliente:"<< endl;
+								printf("\033[0;37m 		->Inserte edad del cliente: \n");
 								int age;
 								cin>> age;
 								
@@ -198,24 +211,25 @@
 								char* id_account = new char[10];
 								sprintf(id_account, "%d\0", a);
 
-								std::cout << "\nSe le asigno la cuenta Numero: "<< atoi(id_account) << endl;
+								printf("\033[1;36m 		Se le asigno la cuenta número: %i \n",atoi(id_account));
 
 								key = ask_key();
 								int initial_amount = ask_deposit_money();
 
 								bool state= banco1-> create_client(nameclient, lastnameclient, id, age, id_account, key, initial_amount);
 							    if(state){
-									std::cout<<"\nCliente creado"<<endl;
+									printf("\033[1;36m 		Cliente creado \n");
 							    }
 							    else{
-									std::cout<<"\nNo se logoro realizar la accion"<<endl;
+									printf("\033[0;31m 		No se logoro realizar la acción \n");
 							    }
 							}
 						break;
 						
 						case 'U':
 						case 'u':{
-							std::cout<< "\nInserte numero de identificacion del cliente:"<< endl;
+							
+							printf("\033[0;37m 		->Inserte numero de identificacion del cliente: \n");
 								id_client = new char[20];
 								cin >> id_client;
 								bool  clinetstate= banco1->id_client_exist(id_client);
@@ -223,16 +237,15 @@
 									BankClient* cliente; 
 									Client_information* client; 
 									char* tecla = new char[2];
-									
 										cliente = banco1->select_client(id_client);
 										client = banco1->consult_client(id_client);
-										std::cout << "Hola " << client->firstName << " " << client->lastName << ".\nQue parametro desea modificar?" << endl;
-										std::cout << "1) Nombre" << endl;
-										std::cout << "2) Apellido" << endl;
-										std::cout << "3) Id" << endl;
-										std::cout << "4) Edad" << endl;
-										std::cout << "5) Todo" << endl;
-										std::cout << "E) Salir" << endl;
+										printf("\033[0;37m 			Hola %s %s.\n 			¿Qué parametro desea modificar? \n",client->firstName,client->lastName);
+										printf("\033[0;36m 			1) Nombre\n");
+										printf("\033[0;36m 			2) Apellido\n");
+										printf("\033[0;36m 			3) Id\n");
+										printf("\033[0;36m 			4) Edad\n");
+										printf("\033[0;36m 			5) Todo\n");
+										printf("\033[0;36m 			E) Salir\n");
 										cin >> tecla;
 										bool indic = false;
 										char* name = new char[20];
@@ -242,58 +255,57 @@
 										switch (*tecla)
 										{
 										case '1':
-											std::cout << "Inserte su nuevo Nombre" << endl;
+											printf("\033[0;37m 		->Inserte su nuevo Nombre \n");
 											cin >> name;
 											indic = banco1->update_client(cliente, name, cliente->get_lastName(), cliente->id_client, cliente->get_age());
+											printf("Interface %s\n",cliente->get_firstName());
 											break;
 										case '2':
-											std::cout << "Inserte su nuevo Apellido" << endl;
+											printf("\033[0;37m 		->Inserte su nuevo Apellido \n");
 											cin >> lastname;
 											indic = banco1->update_client(cliente, cliente->get_firstName(), lastname, cliente->id_client, cliente->get_age());
 											break;
 										case '3': 
-											std::cout << "Inserte su nuevo ID" << endl;
+											printf("\033[0;37m 		->Inserte su nuevo ID \n");
 											cin >> ID;
 											indic = banco1->update_client(cliente, cliente->get_firstName(), cliente->get_lastName(), ID, cliente->get_age());
 											id_client = ID;
 											break; 
 										case '4': 
-											std::cout << "Inserte su nueva Edad" << endl;
+											printf("\033[0;37m 		->Inserte su nueva Edad \n");
 											cin >> age;
 											indic = banco1->update_client(cliente, cliente->get_firstName(), cliente->get_lastName(), cliente->id_client, age);
 											break;
 										case '5': 
-											std::cout << "Inserte su nuevo Nombre" << endl;
+											printf("\033[0;37m 		->Inserte su nuevo Nombre \n");
 											cin >> name;
-											std::cout << "Inserte su nuevo Apellido" << endl;
+											printf("\033[0;37m 		->Inserte su nuevo Apellido \n");
 											cin >> lastname;
-											std::cout << "Inserte su nuevo ID" << endl;
+											printf("\033[0;37m 		->Inserte su nuevo ID \n");
 											cin >> ID;
-											std::cout << "Inserte su nueva Edad" << endl;
+											printf("\033[0;37m 		->Inserte su nueva Edad \n");
 											cin >> age;
 											indic = banco1->update_client(cliente, name, lastname, ID, age);
 											id_client = ID;
 
 											break;
 										default: 
-											std::cout << "Tecla no valida\nPor favor ingrese segun el menu" << endl;
+											printf("\033[0;31m 		Tecla no valida.\nPor favor ingrese segun el menu \n");
 											break;
 										}
 										if (indic) {
-											std::cout << "Datos Actualizados con Exito" << endl;
+											printf("\033[1;36m 		Datos Actualizados con Exito \n");
 										}
 										else {
-											std::cout << "No se ha podido realizar operacion" << endl;
+											printf("\033[0;31m 		No se ha podido realizar operacion \n");
 										}
-										delete name;
-										delete lastname;
-										delete ID;
 									delete tecla;
 								}
 								
 								else {
-									std::cout<<"\ncliente no encontrado"<<endl;
+									printf("\033[0;31m 		Cliente no encontrado \n");
 								}
+
 
 							}
 						break;
@@ -301,7 +313,7 @@
 						case 'A':
 						case 'a':{
 							
-							std::cout << "\nInserte numero de identificacion del cliente:" << endl;
+							printf("\033[0;37m 		->Inserte numero de identificacion del cliente: \n");
 							char* client_id = new char[20];
 							cin >> client_id;
 
@@ -314,31 +326,31 @@
 									int a = banco1->get_how_accounts();
 									char* id_account = new char[10];
 									sprintf(id_account, "%d\0", a);
-									std::cout << "Numero de cuenta:" << atoi(id_account) << std::endl;
+									printf("\033[1;36m 		Numero de cuenta: %s \n",atoi(id_account));
 									bool createclientstate= banco1->create_account(id_account, key, clientee, money );
 									 if(createclientstate){
-										 std::cout<<"\nCuenta creada"<<endl;
+										 printf("\033[1;36m 		Cuenta creada \n");
 									}
 									else {
-										 std::cout<<"\nNo se pudo realizar la operacion"<<endl;
+										 printf("\033[0;31m 		No se pudo realizar la operacion \n");
 									}
 
 							}
 							else{
-								std::cout << "\nCliente no encontrado" << endl;
+								printf("\033[0;31m 		Cliente no encontrado \n");
 
-								std::cout << "\nCrear Cliente" << endl;
+								printf("\033[0;37m 		->Crear Cliente \n");
 
-								std::cout<< "\nInserte nombre del cliente:"<< endl;
+								printf("\033[0;37m 		->Inserte nombre del cliente: \n");
 								char*nameclient= new char[15];
 								cin>> nameclient+0;
 								
-								std::cout<< "\nInserte apellido del cliente:"<< endl;
+								printf("\033[0;37m 		->Inserte apellido del cliente: \n");
 								char*lastnameclient = new char[15];
 								cin>> lastnameclient + 0;
 
 							
-								std::cout<< "\nInserte edad del cliente:"<< endl;
+								printf("\033[0;37m 		->Inserte edad del cliente: \n");
 								int age;
 								cin>> age;
 								
@@ -346,7 +358,7 @@
 								char* id_account = new char[10];
 								sprintf(id_account, "%d\0", a);
 
-								std::cout << "\nSe le asigno la cuenta Numero: "<< atoi(id_account) << endl;
+								printf("\033[1;36m 		Se le asigno la cuenta Numero: %s \n", atoi(id_account));
 
 								key = ask_key();
 								int initial_amount = ask_deposit_money();
@@ -354,10 +366,10 @@
 								bool state= banco1-> create_client(nameclient, lastnameclient, client_id, age, id_account, key, initial_amount);
 
 								if (state) {
-									std::cout << "\nCuenta creada" << endl;
+									printf("\033[1;36m 		Cuenta creada \n");
 								}
 								else {
-									std::cout << "\nNo se logoro realizar la accion" << endl;
+									printf("\033[0;31m 		No se logoro realizar la accion \n");
 								}
 							}
 						}
@@ -366,36 +378,36 @@
 						case 'T':
 						case 't':{
 							char* id_cuenta = new char[20];
-							std::cout << "Ingrese el numero de su cuenta" << endl;
+							printf("\033[0;37m 		->Ingrese el numero de su cuenta \n");
 							cin >> id_cuenta;
 							char* contra = new char[10];
-							std::cout << "Ingrese su contraseña" << endl;
+							printf("\033[0;37m 		->Ingrese su contraseña \n");
 							cin >> contra;
 							int money = 0;
 							int salir=0;
 							do{
 								try{
-							std::cout << "Ingrese el dinero a transferir" << endl;
+							printf("\033[0;37m 		->Ingrese el dinero a transferir \n");
 							cin >> money;
 							if(!cin)
 								throw 125;
 							salir=1;
 							}catch(int){
-								std::cout<<"\nCantidad no valida"<<std::endl;
+								printf("\033[0;31m 		Cantidad no valida \n");
 								cin.clear();
 								cin.ignore();
 
 							}
 						}while(salir==0);
-							std::cout<< "\nInserte el numero de cuenta a donde va a transferir"<<endl;
+							printf("\033[0;37m 		->Inserte el numero de cuenta a donde va a transferir \n");
 							char* accnum2= new char[20];
 							cin >> accnum2;
 
 							bool transferstate = banco1->transfer_money(id_cuenta, contra, accnum2, banco1, money);
 							if (transferstate) {
-								std::cout << "\nTransferencia realizada" << endl;
+								printf("\033[1;36m 		Transferencia realizada \n");
 							}
-							else { std::cout << "\nError en la transferencia" << endl; }
+							else { printf("\033[0;31m 		Error en la transferencia \n"); }
 						
 						}
 							break;
@@ -403,12 +415,12 @@
 						case 'E':
 						case 'e':{
 							char* id_cuenta = new char[20];
-							std::cout << "Ingrese numero de la cuenta" << endl;
+							printf("\033[0;37m 		->Ingrese numero de la cuenta \n");
 							cin >> id_cuenta;
 							char* contra = new char[10];
-							std::cout << "Ingrese su contraseña" << endl;
+							printf("\033[0;37m 		->Ingrese su contraseña \n");
 							cin >> contra;
-							std::cout << "\nPresione 1 para activar la cuenta y 2 o cualquier tecla para bloquear" << endl;
+							printf("\033[0;37m 		->Presione 1 para activar la cuenta y 2 o cualquier tecla para bloquear \n");
 							char* getstatus = new char[2];
 							cin >> getstatus;
 							bool status;
@@ -421,16 +433,16 @@
 								status = false;
 								break;
 							default:
-								status=false;
+
 								break;
 							}
 							if (status != NULL) {
 								bool askopstate = banco1->block_unblock_account(id_cuenta, contra, !status);
-								if (askopstate) std::cout << "\nProceso realizado correctamente" << endl;
-								else std::cout << "\nProceso no completado satisfactoriamente" << endl;
+								if (askopstate) printf("\033[1;36m 		Proceso realizado correctamente \n");
+								else printf("\033[0;31m 		Proceso no completado satisfactoriamente \n");
 							}
 							else {
-								std::cout << "\nSeleccione una operacion valida" << endl;
+								printf("\033[0;31m 		Seleccione una operacion valida \n");
 							}
 
 						}
@@ -439,7 +451,7 @@
 						case 'D':
 						case 'd':{
 							char* id_cuenta = new char[20];
-							std::cout << "Ingrese numero de la cuenta" << endl;
+							printf("\033[0;37m 		->Ingrese numero de la cuenta \n");
 							cin >> id_cuenta;
 							int money = ask_deposit_money();
 							
@@ -448,30 +460,30 @@
 							if (banco1->get_how_accounts()!=0) {
 								status = banco1->deposit(id_cuenta, money);
 							}
-							if(status) std::cout<<"\nProceso realizado correctamente"<<endl;
-							else std::cout<<"\nProceso completado insatisfactoriamente, por favor verifique los datos"<<endl;
+							if(status) printf("\033[1;36m 		Proceso realizado correctamente \n");
+							else printf("\033[0;31m 		Proceso completado insatisfactoriamente, por favor verifique los datos \n");
 						}
 						break;
 						
 						case 'R':
 						case 'r':{
 							char* id_cuenta = new char[20];
-							std::cout << "Ingrese numero de la cuenta" << endl;
+							printf("\033[0;37m 		->Ingrese numero de la cuenta \n");
 							cin >> id_cuenta;
 							char* contra = new char[10];
-							std::cout << "Ingrese su contraseña" << endl;
+							printf("\033[0;37m 		->Ingrese su contraseña \n");
 							cin >> contra;
 							int money = 0;
 							int salir=0;
 							do{
 							try{
-								std::cout << "Ingrese el dinero a retirar" << endl;
+								printf("\033[0;37m 		->Ingrese el dinero a retirar\n");
 								cin >> money;
 								if(!cin)
 									throw 125;
 								salir=1;
 							}catch(int){
-									std::cout << "Cantidad no valida" << endl;
+									printf("\033[0;31m 		Cantidad no valida \n");
 									cin.clear();
 									cin.ignore();
 								}
@@ -480,65 +492,32 @@
 							if (banco1->get_how_accounts() != 0 && banco1->id_account_exist(id_cuenta)) {
 								saldo = banco1->withdrawal(id_cuenta, money, contra);
 								if (saldo == -1) {
-									cout << "No tiene suficiente dinero" << endl;
+									printf("\033[0;31m 		No tiene suficiente dinero \n");
 								}
 								else {
 									ask_consulsaldo(saldo);
 								}
 							}
 							else {
-								cout << "No se pudo realizar el retiro, verifique los datos" << endl;
+								printf("\033[0;31m 		No se pudo realizar el retiro, verifique los datos \n");
 							}
 						}
 						break;
 						default:{
-							std::cout<<"\nOpcion no valida"<<endl;
+							printf("\033[0;31m 		Opcion no valida \n");
 						}
 						break;
 
 					}	
 		}
-	/*	int  TransferinterBank(int money, char * name,char * cuenta){
-				std::cout<<name<<std::endl;
-				int memory_exists;
-				void* memorypoint;
-				std::cout<<name<<std::endl;
-				Bank* banco2= new Bank(name, NULL,NULL);
-				std::cout<<name<<std::endl;
-				memory_exists= shm_open(name, O_RDWR, 0666);
-				printf("exito" );
-				if (memory_exists==-1)
-				{
-					return -1; //-1 error banco no encontrado	
-				}
-				ftruncate(memory_exists, 400);
-				printf("exito" );
-				memorypoint= mmap(0,400, PROT_WRITE, MAP_SHARED, memory_exists,0);
-				printf("exito%s", memorypoint);
-				banco2= (Bank *) memorypoint;
-				bool status;
-				if (banco2->get_how_accounts()!=0)
-				{
-					status=banco2->	deposit(cuenta, money);
-					if(!status){
-						return -3; // error de la cuenta bloqueada o inexistente
-					}
-					else {
-						memorypoint= banco2;
-						sprintf((char *)memorypoint, "%s", banco2);
-						return 0;
-					} //exito
-				}
-				else {return -2;} // -2 error cuenta en banco no encontrada
-	}*/
 		char* ask_accountnum(){
-			std::cout<< "\nInserte su numero de cuenta"<<endl;
+			printf("\033[0;37m 		->Inserte su numero de cuenta \n");
 						char* accnum = 0;
 						cin >> accnum ;
 						return accnum;
 		}
 		char* ask_key(){
-			std::cout<< "\nInserte la clave de su cuenta"<< endl;
+			printf("\033[0;37m 		->Inserte la clave de su cuenta \n");
 			char* enteredkey= new char[20];
 			cin>> enteredkey;
 			return enteredkey;
@@ -549,13 +528,13 @@
 			int money=0;
 			do{
 				try{
-					std::cout<<"\nDigite la cantidad de dinero a depositar"<<endl;		
+					printf("\033[0;37m 		->Digite la cantidad de dinero a depositar \n");		
 					cin>> money;
 					 if(!cin)
 		            throw 127;
 					return money;
 				}catch(int ){
-					std::cout<<"\nCantidad no valida"<<std::endl;
+					printf("\033[0;31m 		Cantidad no valida \n");
 					cin.clear();
 					cin.ignore();
 					money=0;
@@ -563,7 +542,7 @@
 			}while(1);
 		}
 		bool ask_status(){
-			std::cout<<"\nPresione 1 para activar la cuenta y 2 para bloquear"<<endl;
+			printf("\033[0;37m 		->Presione 1 para activar la cuenta y 2 para bloquear \n");
 			char* getstatus = new char[10];
 			cin>> getstatus;
 			switch (*getstatus)
@@ -581,27 +560,27 @@
 			}
 		}
 		void ask_consulsaldo(int saldo){
-			std::cout<<"\nDesea consultar su saldo? y:si, n:no\n"<<endl;
+			printf("\033[0;37m 		Desea consultar su saldo? y:si, n:no\n");
 			char op;
 			cin>> op;
 			switch(op){
 				case'y':
-					std::cout<<"\nSu saldo es: "<< saldo<<endl;
+					printf("\033[1;36m 		Su saldo es: %i",saldo);
 				case 'n':
 				break;
 				default:
-					std::cout<<"\nOpcion no valida"<<endl;
+					printf("\033[0;31m 		Opcion no valida \n");
 				break;
 			}
 		} 
 		char* ask_name(){
-			std::cout<<"\nInserte su nombre"<<endl;
+			printf("\033[0;37m 		->Inserte su nombre \n");
 			char* name= new char[20];
 			cin>> name ;
 			return name;
 		}
 		char* ask_lastname(){
-			std::cout<<"\nInserte su apellido"<<endl;
+			printf("\033[0;37m 		->Inserte su apellido \n");
 			char* lastname= new char[20];
 			cin>> lastname;
 			return lastname;
@@ -609,14 +588,14 @@
 		int ask_age(){
 			do{
 				try{
-				std::cout<<"\nInsete su edad"<<endl;
+				printf("\033[0;37m 		>Inserte su edad \n");
 				int age;
 				cin>> age;
 					if(!cin)
 		            throw 127;
 					return age;
 				}catch(int ){
-					std::cout<<"\nCantidad no valida"<<std::endl;
+					printf("\033[0;31m 		Cantidad no valida \n");
 					cin.clear();
 					cin.ignore();
 				
@@ -624,13 +603,13 @@
 			}while(1);
 		}
 		char* ask_id(){
-			std::cout<<"\nInserte id de la cuenta "<<endl;
-			char* acc_id = new char[12];
+			printf("\033[0;37m 		->Inserte id de la cuenta \n");
+			char* acc_id = 0;
 			cin>> acc_id;
 			return acc_id;
 		}
 		char* ask_id_client(){
-			std::cout<<"\nInserte id del cliente "<<endl;
+			printf("\033[0;37m 		->Inserte id del cliente \n");
 			char* acc_id= new char [12];
 			cin>> acc_id;
 			return acc_id;
