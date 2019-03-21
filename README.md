@@ -1,6 +1,24 @@
-# Lab1 Banco.Cardenas Javier-Cabuya Alberto-Roncancio Brayan 
+# Lab2 Banco con memoria Compartida.Cardenas Javier-Cabuya Alberto-Roncancio Brayan 
 
-# Laboratorio 1 Banco
+# Laboratorio 2 Comunicacion entre bancos con memoria compartida
+
+## Abstract
+The shared memory, along with the traffic lights and message queues, are the shared resources that put at your disposal the disposition of the programs so you can exchange information. In the next document, we are presenting a software development about a communication interface between 2 or more banks systems communicated through IPC technique Shared Memory which is one of many ways to communicate or to share 2 process. 
+
+## Keywords
+Shared Memory, pointers, Communication between process, C++.
+
+## Introduccion
+"Un proceso es la ejecución de un programa, es decir, los datos e instrucciones están cargados en la memoria principal, ejecutándose o esperando a hacerlo."(1) En computador personal se pueden ejecutar múltiples procesos al tiempo, o virtualmente al tiempo (si el sistema no es multi-core), de hecho, el sistema operativo lanza infinidades de procesos para poder lograr cumplir todas las funcionalidades de éste (administrar recursos, archivos, GUI, etc). Los procesos tienen sus propios datos, los cuales utiliza para realizar distintas operaciones. En ocasiones un proceso necesita de un resultado dado por otro proceso, es cuando surge la necesidad de comunicar datos. Existen distintos métodos de comunicación entre procesos como la memoria compartida o las tuberías. En este caso, se realizará un programa de consola que gestione o emule el funcionamiento de un banco y su interacción con otros bancos implementando comunicación entre procesos mediante memoria compartida.
+
+## Planteamiento del Problema
+Se requiere diseñar un sistema de comunicación entre dos bancos (procesos) idénticos, los cuales cumplen funciones propias de gestión de cuentas y de clientes, así como la capacidad de depositar, retirar y realizar trnasferencias entre las cuentas que posea el mismo banco. Adicionalmente se desea poder realizar transferencias entre cuentas de distintos bancos, para ello se debe implementar el método de comunicación de procesos mediante memoria compartida. Cuando el banco se abre, comienza vacío (sin cuentas o clientes). El nombre del banco será el parámetro pasado cuando se ejecuta el proceso. Y debe mostrar la interfaz para interactuar con ella. Si cierra un banco (es decir, presionando Ctrl + C), podría abrirlo nuevamente (con el mismo nombre). Debe agregar una funcionalidad para transferir dinero a la cuenta de otro banco abierto . Cuando lo haga, el saldo de las dos cuentas debe actualizarse instantáneamente (ei, no es necesario que seleccione una opción de actualización , o algo así). La transferencia entre bancos debe mostrar error cuando:
+El banco de destino no está abierto.
+La cuenta de destino no existe en el banco de destino.
+La cuenta de destino está bloqueada.
+
+
+## Procedimiento
 A continuación se desarrolla una breve explicación de cada una de las clases,
 y sus métodos, utilizados para el desarrollo del laboratorio.
 
@@ -240,3 +258,11 @@ En la funcion main, se tiene la parte gráfica del programa, además, que es el 
 	char* ask_key();
 	char* ask_accountnum();
 	#endif
+
+
+## Conclusiones
+* La implementación de la comunicación entre procesos mediante memoria compartida, abre una infinidad de posibilidades, puesto que es la base del funcionamiento de servidores y comuniaciones no centralizadas. La ventaja de estos es que se pueden comunicar infinidad de procesos entre ellos directamente sin necesidad de comunicaciones Master-Slave. Una desventaja es que dos procesos no pueden acceder a la misma memoria compartida al tiempo.
+
+* La forma de comunicación de la memoria compartida fue mediante interpretación de caracteres: se enviaba una cadena codificada y el banco receptor la leía y se decodificaba caracter a caracter. La ventaja de este método es la seguridad, puesto que es dificil descifrar lo que significa cada caracter en el orden de la cadena. La desventaja es que requiere un mayor tiempo de procesamiento, puesto que los datos se deben convertir a cadena de caracteres y posteriormente convertirse de nuevo a los tipos de datos iniciales, esto se evidenció durante el desarrollo ya que se presentaron muchos errores de este tipo y fue necesario realizar una depuración exhaustiva.
+
+* 
